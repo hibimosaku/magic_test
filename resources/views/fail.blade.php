@@ -10,16 +10,9 @@
 
 <body>
   <a href="{{route('top')}}">topに戻る</a><br>
-
-
-  <script>
-    window.onpopstate = function(event) {
-      window.location.href = "http://127.0.0.1:8000";
-    };
-  </script>
 </body>
 
 </html>
 
-成功しました。
-{{request()->query('redirect_status')}}
+失敗しました。
+お手数ですが、再度実行お願いいたします。

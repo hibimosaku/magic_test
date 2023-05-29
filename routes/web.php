@@ -21,24 +21,28 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // })->name('top');
 
-Route::get('/',[WelcomeController::class,'index'])->name('top');
-Route::get('item/{id}',[WelcomeController::class,'show'])->name('item.show');
+Route::get('/', [WelcomeController::class, 'index'])->name('top');
+Route::get('item/{id}', [WelcomeController::class, 'show'])->name('item.show');
 
 // verified ミドルウェアは、 Illuminate\Auth\Middleware\EnsureEmailIsVerified クラスで提供されており、このミドルウェアが適用されたルートにアクセスする場合、ログインしているユーザーがメールアドレスの確認を済ませていない場合、そのユーザーは email/verify ページにリダイレクトされます。
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::prefix('cart')->group(function(){
-    Route::get('/',[CartController::class,'index'])->name('cart.index');
-    Route::post('add',[CartController::class,'add'])->name('cart.add');
-    Route::put('cart/{id}/{color}/{size}',[CartController::class,'update'])->name('cart.update');
-    Route::delete('cart/{id}/{color}/{size}',[CartController::class,'delete'])->name('cart.delete');
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('add', [CartController::class, 'add'])->name('cart.add');
+    Route::put('cart/{id}/{color}/{size}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('cart/{id}/{color}/{size}', [CartController::class, 'delete'])->name('cart.delete');
+    Route::post('sessionStripe', [CartController::class, 'sessionStripe'])->name('cart.sessionStripe');
 });
-Route::prefix('order')->group(function(){
-    Route::get('/',[OrderController::class,'index'])->name('order.index');
-    Route::get('confirm/',[OrderController::class,'indexConfirm'])->name('order.indexConfirm');
-    Route::get('success',[OrderController::class,'success'])->name('success');
+Route::prefix('order')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+    Route::get('confirm', [OrderController::class, 'indexConfirm'])->name('order.indexConfirm');
+    Route::post('checkout', [OrderController::class, 'checkout'])->name('order.checkout');
+    Route::get('success', [OrderController::class, 'success'])->name('order.success');
+    Route::get('fail', [OrderController::class, 'fail'])->name('order.fail');
+    Route::post('cancel', [OrderController::class, 'cancel'])->name('order.cancel');
 });
 
 
@@ -50,4 +54,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

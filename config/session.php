@@ -35,7 +35,7 @@ return [
     'lifetime' => env('SESSION_LIFETIME', 1),
     //  expire_on_closeオプションをtrueに設定すると、
     // ブラウザを閉じるとセッションが終了します。これがデフォルトの設定です。
-    'expire_on_close' => true,
+    'expire_on_close' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -131,7 +131,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+        Str::slug(env('SESSION_NAME', 'cart'), '_') . '_session'
     ),
 
     /*

@@ -15,26 +15,28 @@ define('ITEMNUM', 10);
 
 class CartController extends Controller
 {
-    public function index(){
-        $cart = Session::get('cart',[]);
+    public function index()
+    {
+        $cart = Session::get('cart', []);
         $allSum = 0;
         //合計金額
-        if($cart){
-            foreach($cart as $item){
+        if ($cart) {
+            foreach ($cart as $item) {
                 $allSum += $item['price'] * $item['num'];
             };
         }
-        return view('cart', compact('cart','allSum'))->with('ITEMNUM', ITEMNUM);
+        return view('cart', compact('cart', 'allSum'))->with('ITEMNUM', ITEMNUM);
     }
 
-    public function add(Request $request){
-        $item = Item::where('id',$request->input('item_id'))->first();
+    public function add(Request $request)
+    {
+        $item = Item::where('id', $request->input('item_id'))->first();
         $image1 = Image::where('id', $item->image1)->first();
         $image2 = Image::where('id', $item->image2)->first();
         $image3 = Image::where('id', $item->image3)->first();
         $image4 = Image::where('id', $item->image4)->first();
-
         $cart_info = [
+            'product_id' => Product::where('item_id', $request->input('item_id'))->where('color_id', $request->input('color'))->first()->id,
             'itemId' => $request->input('item_id'),
             'name' => $item->name,
             'image1' => $image1 ? $image1->filename : null,
@@ -42,32 +44,33 @@ class CartController extends Controller
             'image3' => $image3 ? $image3->filename : null,
             'image4' => $image4 ? $image4->filename : null,
             'color' => $request->input('color'),
-            'colorName' => Color::where('id',$request->input('color'))->first()->name,
+            'colorName' => Color::where('id', $request->input('color'))->first()->name,
             'size' => $request->input('size'),
-            'sizeName' => SizeDetail::where('id',$request->input('size'))->first()->name,
+            'sizeName' => SizeDetail::where('id', $request->input('size'))->first()->name,
             'num' => $request->input('num'),
-            'price' => Item::where('id',$request->input('item_id'))->first()->price
+            'price' => Item::where('id', $request->input('item_id'))->first()->price
         ];
-        $cart = Session::get('cart',[]);
+        $cart = Session::get('cart', []);
         $exists = false;
-        foreach($cart as &$item){
-            if($item['itemId'] === $cart_info['itemId'] && $item['color'] === $cart_info['color'] && $item['size'] === $cart_info['size']){
+        foreach ($cart as &$item) {
+            if ($item['itemId'] === $cart_info['itemId'] && $item['color'] === $cart_info['color'] && $item['size'] === $cart_info['size']) {
                 $item['num'] += $cart_info['num'];
                 $exists = true;
                 break;
             }
         };
         unset($item);
-        
-        if(!$exists){
+
+        if (!$exists) {
             $cart[] = $cart_info;
         }
 
-        Session::put('cart',$cart);
+        Session::put('cart', $cart);
         return back();
     }
 
-    public function update(request $request,$id,$color,$size){
+    public function update(request $request, $id, $color, $size)
+    {
         $cart = Session::get('cart', []);
         foreach ($cart as $index => &$item) {
             if ($item['itemId'] === $id && $item['color'] === $color && $item['size'] === $size) {
@@ -75,21 +78,36 @@ class CartController extends Controller
                 break;
             }
         }
-        Session::put('cart',$cart);
+        Session::put('cart', $cart);
 
         return redirect()->route('cart.index');
     }
 
-    public function delete($id,$color,$size){
-        $cart = Session::get('cart',[]);
-        foreach($cart as $index=> &$item){
-            if($item['itemId'] === $id && $item['color'] === $color && $item['size'] === $size){
+    public function delete($id, $color, $size)
+    {
+        $cart = Session::get('cart', []);
+        foreach ($cart as $index => &$item) {
+            if ($item['itemId'] === $id && $item['color'] === $color && $item['size'] === $size) {
                 unset($cart[$index]);
                 break;
             }
         };
-        Session::put('cart',$cart);
+        Session::put('cart', $cart);
         return redirect()->route('cart.index');
     }
+    public function sessionStripe(request $request)
+    {
+        $hasSession = Session::has('cart');
+        if ($hasSession) {
+            return response()->json(['hasSession' => $hasSession]);
+        } else {
+            $paymentId = $request->query('pay');
+            \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+            $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentId);
+            $paymentIntent->cancel();
+            session()->flush();
 
+            return response()->json(['hasSession' => $hasSession]);
+        }
+    }
 }
