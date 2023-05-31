@@ -135,7 +135,7 @@ $url = env('APP_URL');
 
                         body: JSON.stringify(data),
                   }).then((r) => {
-                        console.log('succc')
+                        console.log('succc', r)
                         return r.json()
                   }).catch((e) => {
                         console.log('er', e)
