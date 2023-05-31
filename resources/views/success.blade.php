@@ -1,3 +1,8 @@
+<?php
+$url = env('APP_URL');
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +19,7 @@
 
   <script>
     window.onpopstate = function(event) {
-      window.location.href = "http://127.0.0.1:8000";
+      window.location.href = "{{$urlgi}}";
     };
   </script>
 </body>

@@ -1,3 +1,7 @@
+<?php
+$url = env('APP_URL');
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -121,7 +125,7 @@
                   const {
                         clientSecret,
                         paymentId
-                  } = await fetch("http://127.0.0.1:8000/order/checkout", {
+                  } = await fetch("{{$url}}/order/checkout", {
                         method: "POST",
                         headers: {
                               "Content-Type": "application/json",
@@ -153,7 +157,7 @@
 
                   e.preventDefault();
                   setLoading(true);
-                  const hasSession = await fetch(`http://127.0.0.1:8000/cart/sessionStripe?pay=${payid}`, {
+                  const hasSession = await fetch(`{{$url}}/cart/sessionStripe?pay=${payid}`, {
                         method: "POST",
                         headers: {
                               "Content-Type": "application/json",
@@ -163,7 +167,7 @@
                   const sessionData = await hasSession.json();
                   if (sessionData.hasSession === false) {
                         alert('時間の経過により、失敗しました。')
-                        window.location.href = "http://127.0.0.1:8000";
+                        window.location.href = "{{$url}}";
 
                         return
                   } else {
@@ -174,7 +178,7 @@
                               elements,
                               confirmParams: {
                                     // Make sure to change this to your payment completion page
-                                    return_url: 'http://127.0.0.1:8000/order/success',
+                                    return_url: '{{$url}}/order/success',
                                     receipt_email: "n.kubomitsu@gmail.com",
                               },
                         });
