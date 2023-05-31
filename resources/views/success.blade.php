@@ -19,7 +19,7 @@ $url = env('APP_URL');
 
   <script>
     window.onpopstate = function(event) {
-      window.location.href = "{{$urlgi}}";
+      window.location.href = "{{$url}}";
     };
   </script>
 </body>
