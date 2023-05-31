@@ -122,6 +122,7 @@ $url = env('APP_URL');
                         ],
                         allSum: "{{$allSum}}"
                   };
+                  console.log('1', "{{$url}}");
                   const {
                         clientSecret,
                         paymentId
@@ -134,7 +135,10 @@ $url = env('APP_URL');
 
                         body: JSON.stringify(data),
                   }).then((r) => {
+                        console.log('succc')
                         return r.json()
+                  }).catch((e) => {
+                        console.log('er', e)
                   })
                   payid = paymentId;
                   elements = stripe.elements({
