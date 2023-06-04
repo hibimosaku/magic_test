@@ -10,9 +10,9 @@
 
   <!-- Scripts -->
   <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
+  @vite(['resources/css/test.scss'])
   <link rel="stylesheet" href="{{ asset('css/stripe.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/test.css') }}">
-  <!-- @vite(['resources/css/style.css']) -->
+  <!-- <link rel="stylesheet" href="{{ asset('css/test.scss') }}"> -->
 
   <script src="https://js.stripe.com/v3/"></script>
 
@@ -22,8 +22,8 @@
 <body>
   <header class="header">
     <h1>logo</h1>
-    <nav>
-      <ul>
+    <nav class="header_nav">
+      <ul class="header_menu">
         <li><a href="{{route('top')}}">TOP</a></li>
         <li><a href="{{route('cart.index')}}">カート</a></li>
       </ul>

@@ -112,6 +112,9 @@ ul {
     background-color: #fff;
     box-shadow: 0 0 0.625rem 0.0625rem rgb(0 0 0 / 20%);
 }
-.nav {
+.header_menu {
     display: flex;
+    li{
+        margin: 0 1rem;
+    }
 }
