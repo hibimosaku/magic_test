@@ -1,3 +1,9 @@
+@extends('layouts.test')
+
+<head>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+@section('content')
 <a href="{{route('top')}}">topに戻る</a><br>
 @if(!$cart)
 <p>カート空です</p>
@@ -16,7 +22,7 @@
 <img style="height:50px;" src="{{ asset('images/'. $item['image2'] ?? '') }}">
 <img style="height:50px;" src="{{ asset('images/'. $item['image3'] ?? '') }}">
 <img style="height:50px;" src="{{ asset('images/'. $item['image4'] ?? '') }}">
-<p>名前：{{$item['name']}}</p>
+<p class="abc">名前：{{$item['name']}}</p>
 <p>色：{{$item['colorName']}}</p>
 <p>サイズ：{{$item['sizeName']}}</p>
 <p>価格：{{number_format($item['price'])}}</p>
@@ -42,3 +48,4 @@
 <hr>
 @endforeach
 @endif
+@endsection

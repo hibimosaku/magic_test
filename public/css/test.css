@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+/* 要素共通 */
+body {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 700;
+    color: #000;
+}
+
+@media (min-width: 768px) {
+    body {
+        font-size: 1.125rem;
+    }
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a,
+a:hover,
+a i {
+    transition: all 0.3s;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: bottom;
+}
+
+ul {
+    list-style: none;
+}
+
+/* クラス共通 */
+.flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.outfit {
+    font-family: Outfit, sans-serif;
+}
+
+.medium {
+    font-weight: 500;
+}
+
+.container {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    max-width: 67.5rem;
+    margin: auto;
+}
+
+.button {
+    position: relative;
+    display: block;
+    color: #fff;
+    text-align: center;
+    border-radius: 3rem;
+}
+.button-icon {
+    position: absolute;
+    top: 46%;
+    right: 1.75rem;
+    transform: translate(0%, -45%);
+}
+
+@media (min-width: 768px) {
+    .button-icon {
+        top: 50%;
+        right: 1.25rem;
+        transform: translate(0%, -50%);
+    }
+}
+
+.button:hover .button-icon {
+    margin-right: -0.5625rem;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding-top: 6.25rem;
+        padding-bottom: 6.25rem;
+    }
+}
+
+.section-title {
+    margin-bottom: 2.5rem;
+    font-size: 2.1875rem;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .section-title {
+        margin-bottom: 3rem;
+    }
+}
+
+/* ヘッダー */
+.header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    box-shadow: 0 0 0.625rem 0.0625rem rgb(0 0 0 / 20%);
+}
+.nav {
+    display: flex;
+}

@@ -1,4 +1,4 @@
-@import "stripe";
+/* @import "stripe"; */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

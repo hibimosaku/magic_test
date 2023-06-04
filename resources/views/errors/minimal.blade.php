@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>@yield('title')</title>
 
-    <!-- Fonts -->
-    <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Styles -->
     <style>
         /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
         html {
@@ -23,6 +20,11 @@
 
         a {
             background-color: transparent
+        }
+
+        code {
+            font-family: monospace, monospace;
+            font-size: 1em
         }
 
         [hidden] {
@@ -46,6 +48,10 @@
             text-decoration: inherit
         }
 
+        code {
+            font-family: Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace
+        }
+
         svg,
         video {
             display: block;
@@ -58,22 +64,35 @@
         }
 
         .bg-white {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+            --bg-opacity: 1;
+            background-color: #fff;
+            background-color: rgba(255, 255, 255, var(--bg-opacity))
         }
 
         .bg-gray-100 {
-            --tw-bg-opacity: 1;
-            background-color: rgb(243 244 246 / var(--tw-bg-opacity))
+            --bg-opacity: 1;
+            background-color: #f7fafc;
+            background-color: rgba(247, 250, 252, var(--bg-opacity))
         }
 
         .border-gray-200 {
-            --tw-border-opacity: 1;
-            border-color: rgb(229 231 235 / var(--tw-border-opacity))
+            --border-opacity: 1;
+            border-color: #edf2f7;
+            border-color: rgba(237, 242, 247, var(--border-opacity))
+        }
+
+        .border-gray-400 {
+            --border-opacity: 1;
+            border-color: #cbd5e0;
+            border-color: rgba(203, 213, 224, var(--border-opacity))
         }
 
         .border-t {
             border-top-width: 1px
+        }
+
+        .border-r {
+            border-right-width: 1px
         }
 
         .flex {
@@ -165,14 +184,18 @@
             margin-top: -1px
         }
 
+        .max-w-xl {
+            max-width: 36rem
+        }
+
         .max-w-6xl {
             max-width: 72rem
         }
 
-        /* .min-h-screen {
+        .min-h-screen {
             min-height: 100vh
         }
- */
+
         .overflow-hidden {
             overflow: hidden
         }
@@ -184,6 +207,11 @@
         .py-4 {
             padding-top: 1rem;
             padding-bottom: 1rem
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem
         }
 
         .px-6 {
@@ -212,9 +240,7 @@
         }
 
         .shadow {
-            --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / .1), 0 1px 2px -1px rgb(0 0 0 / .1);
-            --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
-            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06)
         }
 
         .text-center {
@@ -222,38 +248,49 @@
         }
 
         .text-gray-200 {
-            --tw-text-opacity: 1;
-            color: rgb(229 231 235 / var(--tw-text-opacity))
+            --text-opacity: 1;
+            color: #edf2f7;
+            color: rgba(237, 242, 247, var(--text-opacity))
         }
 
         .text-gray-300 {
-            --tw-text-opacity: 1;
-            color: rgb(209 213 219 / var(--tw-text-opacity))
+            --text-opacity: 1;
+            color: #e2e8f0;
+            color: rgba(226, 232, 240, var(--text-opacity))
         }
 
         .text-gray-400 {
-            --tw-text-opacity: 1;
-            color: rgb(156 163 175 / var(--tw-text-opacity))
+            --text-opacity: 1;
+            color: #cbd5e0;
+            color: rgba(203, 213, 224, var(--text-opacity))
         }
 
         .text-gray-500 {
-            --tw-text-opacity: 1;
-            color: rgb(107 114 128 / var(--tw-text-opacity))
+            --text-opacity: 1;
+            color: #a0aec0;
+            color: rgba(160, 174, 192, var(--text-opacity))
         }
 
         .text-gray-600 {
-            --tw-text-opacity: 1;
-            color: rgb(75 85 99 / var(--tw-text-opacity))
+            --text-opacity: 1;
+            color: #718096;
+            color: rgba(113, 128, 150, var(--text-opacity))
         }
 
         .text-gray-700 {
-            --tw-text-opacity: 1;
-            color: rgb(55 65 81 / var(--tw-text-opacity))
+            --text-opacity: 1;
+            color: #4a5568;
+            color: rgba(74, 85, 104, var(--text-opacity))
         }
 
         .text-gray-900 {
-            --tw-text-opacity: 1;
-            color: rgb(17 24 39 / var(--tw-text-opacity))
+            --text-opacity: 1;
+            color: #1a202c;
+            color: rgba(26, 32, 44, var(--text-opacity))
+        }
+
+        .uppercase {
+            text-transform: uppercase
         }
 
         .underline {
@@ -263,6 +300,10 @@
         .antialiased {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale
+        }
+
+        .tracking-wider {
+            letter-spacing: .05em
         }
 
         .w-5 {
@@ -279,6 +320,108 @@
 
         .grid-cols-1 {
             grid-template-columns: repeat(1, minmax(0, 1fr))
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                transform: rotate(0deg)
+            }
+
+            to {
+                transform: rotate(1turn)
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg)
+            }
+
+            to {
+                transform: rotate(1turn)
+            }
+        }
+
+        @-webkit-keyframes ping {
+            0% {
+                transform: scale(1);
+                opacity: 1
+            }
+
+            75%,
+            to {
+                transform: scale(2);
+                opacity: 0
+            }
+        }
+
+        @keyframes ping {
+            0% {
+                transform: scale(1);
+                opacity: 1
+            }
+
+            75%,
+            to {
+                transform: scale(2);
+                opacity: 0
+            }
+        }
+
+        @-webkit-keyframes pulse {
+
+            0%,
+            to {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .5
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            to {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .5
+            }
+        }
+
+        @-webkit-keyframes bounce {
+
+            0%,
+            to {
+                transform: translateY(-25%);
+                -webkit-animation-timing-function: cubic-bezier(.8, 0, 1, 1);
+                animation-timing-function: cubic-bezier(.8, 0, 1, 1)
+            }
+
+            50% {
+                transform: translateY(0);
+                -webkit-animation-timing-function: cubic-bezier(0, 0, .2, 1);
+                animation-timing-function: cubic-bezier(0, 0, .2, 1)
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            to {
+                transform: translateY(-25%);
+                -webkit-animation-timing-function: cubic-bezier(.8, 0, 1, 1);
+                animation-timing-function: cubic-bezier(.8, 0, 1, 1)
+            }
+
+            50% {
+                transform: translateY(0);
+                -webkit-animation-timing-function: cubic-bezier(0, 0, .2, 1);
+                animation-timing-function: cubic-bezier(0, 0, .2, 1)
+            }
         }
 
         @media (min-width:640px) {
@@ -351,123 +494,58 @@
 
         @media (prefers-color-scheme:dark) {
             .dark\:bg-gray-800 {
-                --tw-bg-opacity: 1;
-                background-color: rgb(31 41 55 / var(--tw-bg-opacity))
+                --bg-opacity: 1;
+                background-color: #2d3748;
+                background-color: rgba(45, 55, 72, var(--bg-opacity))
             }
 
             .dark\:bg-gray-900 {
-                --tw-bg-opacity: 1;
-                background-color: rgb(17 24 39 / var(--tw-bg-opacity))
+                --bg-opacity: 1;
+                background-color: #1a202c;
+                background-color: rgba(26, 32, 44, var(--bg-opacity))
             }
 
             .dark\:border-gray-700 {
-                --tw-border-opacity: 1;
-                border-color: rgb(55 65 81 / var(--tw-border-opacity))
+                --border-opacity: 1;
+                border-color: #4a5568;
+                border-color: rgba(74, 85, 104, var(--border-opacity))
             }
 
             .dark\:text-white {
-                --tw-text-opacity: 1;
-                color: rgb(255 255 255 / var(--tw-text-opacity))
+                --text-opacity: 1;
+                color: #fff;
+                color: rgba(255, 255, 255, var(--text-opacity))
             }
 
             .dark\:text-gray-400 {
-                --tw-text-opacity: 1;
-                color: rgb(156 163 175 / var(--tw-text-opacity))
-            }
-
-            .dark\:text-gray-500 {
-                --tw-text-opacity: 1;
-                color: rgb(107 114 128 / var(--tw-text-opacity))
+                --text-opacity: 1;
+                color: #cbd5e0;
+                color: rgba(203, 213, 224, var(--text-opacity))
             }
         }
     </style>
 
     <style>
         body {
-            font-family: 'Nunito', sans-serif;
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
     </style>
 </head>
 
 <body class="antialiased">
-    <a href="{{route('cart.index')}}">カートに移動する</a>
-    {{ $items->links() }}
-    <!-- カテゴリ分類 -->
-    <!-- formに書いているcategoryはselectのnameのこと -->
-    <form action="{{route('top',['category','order','keyword'])}}">
-        @csrf
-        検索キーワード：<input id="keyword" style="border:1px solid black;" type="text" name="keyword" value={{Request::get('keyword')}}><br>
-        カテゴリー：<select name="category" id="category">
-            <option value="0" @if(e(Request::get('category')==="0" )) selected @endif>all</option>
-            @foreach($categories as $category)
-            <option value="{{$category->id}}" @if(\Request::get('category')==$category->id) selected @endif>{{$category->name}}</option>
-            @endforeach
-        </select>
-        <p>並び替え：<br>
-            <input type="radio" name="order" value="no" @if(e(Request::get('order')==="no" )) checked @endif checked>変更なし
-            <input type="radio" name="order" value="latest" @if(e(Request::get('order')==="latest" )) checked @endif>最新順
-            <input type="radio" name="order" value="priceHigh" @if(e(Request::get('order')==="priceHigh" )) checked @endif>価格高い順
-            <input type="radio" name="order" value="pricelow" @if(e(Request::get('order')==="pricelow" )) checked @endif>価格低い順
-        </p>
-    </form>
-    <p>件数：{{$items->total()}}件</p>
-    @if($items->count() > 0)
-    @foreach($items as $item)
-    <div>
-        <a href="{{ route('item.show', ['id' => $item->id]) }}">
-            <p>id：{{ $item->id }}</p>
-            <p>名前：{{ $item->name }}</p>
-            @if ($item->imageFirst)
-            <!-- <p>{{ $item->imageFirst->filename }}</p> -->
-            <p>カテゴリー：{{ $item->secondaryCategory->name}}</p>
-            <p>{{ number_format($item->price) }}円</p>
-            <p>作成日：{{ $item->created_at }}</p>
-            <img style="height:50px;" src="{{ asset('images/'. $item->imageFirst->filename) }}">
-            @else
-            <p>画像なし</p>
-            @endif
-        </a>
-    </div>
-    @endforeach
-    @else
-    <p>該当商品はございません。</p>
-    @endif
-
-    <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-        @if (Route::has('login'))
-        <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-            @auth
-            <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
-            @else
-            <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
-
-            @if (Route::has('register'))
-            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-            @endif
-            @endauth
+    <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
+        <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
+            <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
+                <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider">
+                    @yield('code')
+                </div>
+                <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
+                    @yield('message')
+                </div>
+            </div>
+            <a href="{{route('top')}}">topに戻る</a>
         </div>
-        @endif
     </div>
 </body>
-<script>
-    const category = document.querySelector('#category')
-    category.addEventListener('change', function(e) {
-        this.form.submit();
-    })
-
-    const keyword = document.querySelector('#keyword')
-    keyword.addEventListener('change', function(e) {
-        this.form.submit();
-    })
-
-    const orderRadios = document.getElementsByName('order');
-
-    // ラジオボタンの変更イベントを監視
-    orderRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-            this.form.submit();
-        });
-    });
-</script>
 
 </html>

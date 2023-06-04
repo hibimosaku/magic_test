@@ -4,10 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Color;
-use App\Models\Size;
-use App\Models\SizeDetail;
-use App\Models\PrimaryCategory;
+use App\Models\Item;
+use App\Models\Product;
 
 class DatabaseSeeder extends Seeder
 {
@@ -31,9 +29,11 @@ class DatabaseSeeder extends Seeder
             ImageSeeder::class,
             PrimaryCategorySeeder::class,
             SecondaryCategorySeeder::class,
-            ItemSeeder::class,
-            ProductSeeder::class,
+            // ItemSeeder::class,
+            // ProductSeeder::class,
             SizeDetailSeeder::class,
         ]);
+        Item::factory(50)->create();
+        Product::factory(150)->create();
     }
 }

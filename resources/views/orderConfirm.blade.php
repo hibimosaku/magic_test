@@ -17,10 +17,10 @@ $url = env('APP_URL');
 <body>
       <a href="{{route('top')}}">topに戻る</a><br>
       <a href="{{route('cart.index')}}">カートに戻る</a><br>
+      <a href="{{route('order.index')}}">購入手続きに戻る</a><br>
 
       <form method="GET" action="{{route('order.success')}}">
             @csrf
-            <input type="hidden" name="pay" value="{{$pay}}">
             <input type="hidden" name="cart" value="{{json_encode($cart)}}">
             @foreach($cart as $item)
             <img style="height:50px;" src="{{ asset('images/'. $item['image1'] ?? '') }}">
@@ -33,17 +33,17 @@ $url = env('APP_URL');
             <hr>
             @endforeach
             <p>総額：{{number_format($allSum)}}円</p>
-            <p>個人名：{{$name}}</p>
-            <p>アドレス名：{{$email}}</p>
+            <p>個人名：{{$user_info['name']}}</p>
+            <p>アドレス名：{{$user_info['email']}}</p>
             <p>送り先</p>
-            <p>〒{{$postal_code}}</p>
-            <p>{{$prefecture}}{{$city}}{{$address1}}{{$address2}}</p>
-            <p>支払い方法：{{$pay}}</p>
-            @if($pay !== 'credit')
+            <p>〒{{$user_info['postal_code']}}</p>
+            <p>{{$user_info['prefecture']}}{{$user_info['city']}}{{$user_info['address1']}}{{$user_info['address2']}}</p>
+            <p>支払い方法：{{$user_info['pay']}}</p>
+            @if($user_info['pay'] !== 'credit')
             <button type="submit">注文確定</button>
             @endif
       </form>
-      @if($pay === 'credit')
+      @if($user_info['pay'] === 'credit')
       <form id="payment-form">
             <table>
                   <tr>
@@ -97,7 +97,7 @@ $url = env('APP_URL');
             const csrfToken = "{{ csrf_token() }}";
             // The items the customer wants to buy
             // const items = [{{$allSum}}];
-            const pay = "{{$pay}}";
+            const pay = "{{$user_info['pay']}}";
             let elements;
             if (pay === 'credit') {
                   initialize();

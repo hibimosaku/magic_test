@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string('user_id');
             $table->string('name');
             $table->string('email');
+            $table->string('tel');
             $table->enum('pay', ['cash', 'credit', 'bank']);
             $table->string('payId');
             $table->string('postal_code', 8);
             $table->string('prefecture');
             $table->string('city');
             $table->string('address1');
-            $table->string('address2');
-            // $table->string('tel');
+            $table->string('address2')->nullable();
             $table->timestamps();
         });
     }

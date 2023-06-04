@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Item;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -17,51 +18,51 @@ class ProductSeeder extends Seeder
     {
         DB::table('products')->insert([
             [
-                'item_id' => 1,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 1,
             ],
             [
-                'item_id' => 2,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 2,
             ],
             [
-                'item_id' => 3,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 3,
             ],
             [
-                'item_id' => 4,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 2,
             ],
             [
-                'item_id' => 5,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 2,
             ],
             [
-                'item_id' => 6,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 3,
             ],
             [
-                'item_id' => 1,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 2,
             ],
             [
-                'item_id' => 1,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 3,
             ],
             [
-                'item_id' => 3,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 1,
             ],
             [
-                'item_id' => 4,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 3,
             ],
             [
-                'item_id' => 5,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 2,
             ],
             [
-                'item_id' => 6,
+                'item_id' => Item::factory()->create()->id,
                 'color_id' => 2,
             ],
         ]);

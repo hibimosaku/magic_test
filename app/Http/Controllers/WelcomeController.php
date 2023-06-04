@@ -16,22 +16,34 @@ class WelcomeController extends Controller
 {
     public function index(Request $request)
     {
-        // カテゴリー選択時
-        if ($request->category === null || $request->category == 0) {
-            $items = Item::orderBy('created_at', 'desc')->paginate(3);
+
+        $query = Item::where('is_selling', true);
+
+        if ($request->category !== null && $request->category != 0) {
+            $query->where('secondary_category_id', $request->category);
+        }
+
+        if ($request->order === 'priceHigh') {
+            $query->orderBy('price', 'desc');
+        } elseif ($request->order === 'low') {
+            $query->orderBy('price', 'asc');
+        } elseif ($request->order === 'latest') {
+            $query->orderBy('created_at', 'desc');
         } else {
-            $items = Item::where('secondary_category_id', $request->category)->paginate(3);
+            $query->orderBy('created_at', 'desc');
+        }
+
+        if ($request->keyword) {
+            $keyword = strtolower($request->keyword);
+            $query->whereRaw('LOWER(name) LIKE ?', ['%' . $keyword . '%']);
         }
 
 
-        //　検索ワード機能
 
-        //  並び替え機能
-
+        $items = $query->paginate(3);
 
         $categories = SecondaryCategory::all();
 
-        // dd($items, $categories);
         return view('welcome', compact(['items', 'categories']));
     }
 

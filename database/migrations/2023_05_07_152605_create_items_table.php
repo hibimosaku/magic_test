@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('information');
             $table->unsignedInteger('price');
             $table->foreignId('size_id')->constrained();
+            $table->boolean('is_selling');
             $table->integer('sort_order');
             $table->foreignId('secondary_category_id')->constrained();
             $table->foreignId('image1')->constrained('images');

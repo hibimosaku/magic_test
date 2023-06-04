@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// })->name('top');
 
 Route::get('/', [WelcomeController::class, 'index'])->name('top');
 Route::get('item/{id}', [WelcomeController::class, 'show'])->name('item.show');

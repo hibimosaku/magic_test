@@ -6,6 +6,7 @@ use Stripe\Exception\CardException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Models\Purchase;
+use App\Models\Item;
 use App\Models\PurchaseDetail;
 
 
@@ -13,31 +14,34 @@ class OrderController extends Controller
 {
     public function index(request $request)
     {
-
+        //カートがなければ、カートにリダイレクト
         if (!session()->has('cart')) {
             return redirect()->route('cart.index');
         };
+        //リクエスト情報なし（urlを直接たたいたことを想定）
         if ($request->all() === []) {
+            $cart = Session::get('cart');
             // error表示書く
             // とりあえず、リダイレクトしとく
             // return redirect()->route('top');
+            // abort(500);//エラー画面にいく
+        } else {
+            $cart = json_decode($request->input('cart'), true);
         }
-        // $cart = json_decode($request->input('cart'), true);
-        // $errors = session()->get('errors');
-        // if($errors){
 
-        //    return view('order', ['errors' => $errors]);
-        // };
-        $cart = json_decode($request->input('cart'), true);
         $allSum = 0;
-        foreach ($cart as $item) {
-            $allSum += $item['price'] * $item['num'];
+        foreach ($cart as $key => $item) {
+            if (isSelling($item) === 0) {
+                unset($cart[$key]);
+            } else {
+                $allSum += $item['price'] * $item['num'];
+            }
         };
         return view('order', compact(['cart', 'allSum']));
     }
 
 
-    //最終購入確認ページ
+    //購入確認ページ
     public function indexConfirm(Request $request)
     {
         if (!session()->has('cart')) {
@@ -45,21 +49,28 @@ class OrderController extends Controller
         };
 
         $validator = $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'postal_code' => 'required|max:8',
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255',
+            'tel' => 'required|digits_between:10,11',
+            'postal_code' => 'required|digits:7',
             'prefecture' => 'required',
             'city' => 'required',
-            'address1' => 'required',
+            'address1' => 'required|max:255',
             'pay' => 'required'
         ], [
             'name.required' => '名前は必須項目です。',
+            'name.max' => '名前は255文字以内で入力してください。',
             'email.required' => 'メールは必須項目です。',
+            'email.email' => '有効なメールアドレスを入力してください。',
+            'email.max' => 'メールアドレスは255文字以内で入力してください。',
+            'tel.required' => '電話番号は必須項目です。',
+            'tel.digits_between' => '有効な電話番号を入力してください。',
             'postal_code.required' => '郵便番号は必須項目です。',
-            'postal_code.max' => '郵便番号は8文字以内で入力してください。',
+            'postal_code.digits' => '有効な郵便番号を入力してください。',
             'prefecture.required' => '都道府県は必須項目です。',
             'city.required' => '市区町村は必須項目です。',
             'address1.required' => '番地は必須項目です。',
+            'address1.max' => '番地は255文字以内で入力してください。',
             'pay.required' => '支払いは必須項目です。',
         ]);
 
@@ -71,6 +82,7 @@ class OrderController extends Controller
         $user_info = [
             'name' => $request->name,
             'email' => $request->email,
+            'tel' => $request->tel,
             'pay' => $request->pay,
             'postal_code' => $request->postal_code,
             'prefecture' => $request->prefecture,
@@ -78,17 +90,9 @@ class OrderController extends Controller
             'address1' => $request->address1,
             'address2' => $request->address2,
         ];
-        $name = $request->name;
-        $email = $request->email;
-        $pay = $request->pay;
-        $postal_code = $request->postal_code;
-        $prefecture = $request->prefecture;
-        $city = $request->city;
-        $address1 = $request->address1;
-        $address2 = $request->address2;
 
         Session::put('user_info', $user_info);
-        return view('orderConfirm', compact(['name', 'email', 'pay', 'cart', 'allSum', 'postal_code', 'prefecture', 'city', 'address1', 'address2']));
+        return view('orderConfirm', compact(['cart', 'allSum', 'user_info']));
     }
 
 
@@ -196,6 +200,7 @@ function createDb($pay, $user_id)
     $purchase->user_id = $user_id;
     $purchase->name = $user_info['name'];
     $purchase->email = $user_info['email'];
+    $purchase->tel = $user_info['tel'];
     $purchase->pay = $pay;
     $purchase->payId = $paymentId;
     $purchase->postal_code = $user_info['postal_code'];
@@ -217,3 +222,8 @@ function createDb($pay, $user_id)
         $purchaseDetail->save();
     }
 }
+
+function isSelling($item)
+{
+    return Item::where('id', $item['itemId'])->first()->is_selling;
+};

@@ -27,7 +27,25 @@ class ColorSeeder extends Seeder
             ],
             [
                 'name' => '白'
+            ],
+            [
+                'name' => '紫'
+            ],
+            [
+                'name' => '黄土'
+            ],
+            [
+                'name' => '黄緑'
+            ],
+            [
+                'name' => '黒'
+            ],
+            [
+                'name' => 'ピンク'
+            ],
+            [
+                'name' => 'カーキ'
             ]
-            ]);
+        ]);
     }
 }

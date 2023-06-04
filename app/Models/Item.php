@@ -58,7 +58,8 @@ class Item extends Model
     {
         return $this->belongsTo(Size::class);
     }
-
-
-
+    public function secondaryCategory()
+    {
+        return $this->belongsTo(SecondaryCategory::class, 'secondary_category_id');
+    }
 }

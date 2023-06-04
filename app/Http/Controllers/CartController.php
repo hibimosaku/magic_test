@@ -21,9 +21,14 @@ class CartController extends Controller
         $allSum = 0;
         //合計金額
         if ($cart) {
-            foreach ($cart as $item) {
-                $allSum += $item['price'] * $item['num'];
+            foreach ($cart as $key => $item) {
+                if (isSelling($item) === 0) {
+                    unset($cart[$key]);
+                } else {
+                    $allSum += $item['price'] * $item['num'];
+                }
             };
+            Session::put('cart', $cart);
         }
         return view('cart', compact('cart', 'allSum'))->with('ITEMNUM', ITEMNUM);
     }
@@ -111,3 +116,7 @@ class CartController extends Controller
         }
     }
 }
+function isSelling($item)
+{
+    return Item::where('id', $item['itemId'])->first()->is_selling;
+};
