@@ -1,3 +1,6 @@
+@extends('layouts.layout-nonav')
+
+@section('content')
 <?php
 $prefectures = config('prefectures');
 
@@ -98,3 +101,4 @@ if (empty($cart)) {
     document.querySelector(`#${selected}`).style.display = "block";
   }
 </script>
+@endsection

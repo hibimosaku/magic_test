@@ -1,10 +1,5 @@
-@extends('layouts.test')
-
-<head>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
+@extends('layouts.layout-nonav')
 @section('content')
-<a href="{{route('top')}}">topに戻る</a><br>
 @if(!$cart)
 <p>カート空です</p>
 @else

@@ -10,7 +10,7 @@
 
   <!-- Scripts -->
   <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
-  @vite(['resources/css/test.scss'])
+  @vite(['resources/css/style.scss'])
   <link rel="stylesheet" href="{{ asset('css/stripe.css') }}">
   <!-- <link rel="stylesheet" href="{{ asset('css/test.scss') }}"> -->
 
@@ -20,18 +20,16 @@
 </head>
 
 <body>
-  <header class="header">
-    <h1>logo</h1>
-    <nav class="header_nav">
-      <ul class="header_menu">
-        <li><a href="{{route('top')}}">TOP</a></li>
-        <li><a href="{{route('cart.index')}}">カート</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    @yield('content')
-  </main>
+  @include('components.Header')
+  <div class="container-nav">
+    <nav class="lnav">ローカルナビ</nav>
+    <main class="main">
+      @yield('content')
+    </main>
+    <footer class="footer">
+      <p>footer</p>
+    </footer>
+  </div>
 </body>
 
 </html>

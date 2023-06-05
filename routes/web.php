@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\InquiryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [WelcomeController::class, 'index'])->name('top');
+Route::get('/inquiry', [InquiryController::class, 'index'])->name('inquiry');
 Route::get('item/{id}', [WelcomeController::class, 'show'])->name('item.show');
 
 // verified ミドルウェアは、 Illuminate\Auth\Middleware\EnsureEmailIsVerified クラスで提供されており、このミドルウェアが適用されたルートにアクセスする場合、ログインしているユーザーがメールアドレスの確認を済ませていない場合、そのユーザーは email/verify ページにリダイレクトされます。

@@ -3,7 +3,7 @@
 /* 要素共通 */
 body {
     font-family: "Noto Sans JP", sans-serif;
-    font-weight: 700;
+    font-weight: 400;
     color: #000;
 }
 
@@ -50,8 +50,8 @@ ul {
 }
 
 .container {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    // padding-top: 5rem;
+    // padding-bottom: 5rem;
     max-width: 67.5rem;
     margin: auto;
 }
@@ -101,6 +101,47 @@ ul {
     }
 }
 
+// レイアウト
+.container-nav {
+    padding-top: 3.4rem;
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    grid-template-rows: 1fr 100px;
+    grid-template-areas: 
+        "lnav main"
+        "footer footer"
+    ;
+    .main {
+        grid-area: main;
+    }
+    .lnav {
+        grid-area: lnav;
+        background-color: #8fffd4;
+        
+    }
+    .footer {
+        grid-area: footer;
+        
+    }
+}
+.container-nonav {
+    padding-top: 3.4rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 100px;
+    grid-template-areas: 
+        "main"
+        "footer"
+    ;
+    .main {
+        grid-area: main;
+    }
+    .footer {
+        grid-area: footer;
+        
+    }
+}
+
 /* ヘッダー */
 .header {
     width: 100%;
@@ -109,12 +150,63 @@ ul {
     z-index: 1;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: #fff;
     box-shadow: 0 0 0.625rem 0.0625rem rgb(0 0 0 / 20%);
 }
 .header_menu {
     display: flex;
-    li{
-        margin: 0 1rem;
+    margin-right: 1rem;
+
+    li + li{
+        margin-left: 1rem;
     }
+}
+
+
+// main
+// .main {
+// }
+
+// フッター
+footer {
+    padding: 2.4rem 0;
+    background-color: #a39898;
+
+}
+
+
+// ペジネーション
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination li {
+    margin-right: 5px;
+}
+
+.pagination li a,
+.pagination li span {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+    background-color: #fff;
+}
+
+.pagination li.active span {
+    font-weight: bold;
+}
+
+.pagination li.disabled span,
+.pagination li.disabled a {
+    color: #999;
+    pointer-events: none;
+    cursor: default;
 }
