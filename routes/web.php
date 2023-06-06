@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [WelcomeController::class, 'index'])->name('top');
-Route::get('/inquiry', [InquiryController::class, 'index'])->name('inquiry');
+// Route::get('/inquiry', [InquiryController::class, 'index'])->name('inquiry');
 Route::get('item/{id}', [WelcomeController::class, 'show'])->name('item.show');
 
 // verified ミドルウェアは、 Illuminate\Auth\Middleware\EnsureEmailIsVerified クラスで提供されており、このミドルウェアが適用されたルートにアクセスする場合、ログインしているユーザーがメールアドレスの確認を済ませていない場合、そのユーザーは email/verify ページにリダイレクトされます。
@@ -28,6 +28,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::prefix('inquiry')->group(function () {
+    Route::get('/', [InquiryController::class, 'index'])->name('inquiry');
+    Route::get('/send', [InquiryController::class, 'send'])->name('inquiry.send');
+});
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('add', [CartController::class, 'add'])->name('cart.add');

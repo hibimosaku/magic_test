@@ -6,7 +6,7 @@
 <p>合計金額:{{number_format($allSum)}}円</p>
 <form method="GET" action="{{route('order.index')}}">
   <input type="hidden" name="cart" value="{{ json_encode($cart) }}">
-  <button type="submit">購入手続きへ</button>
+  <button class="button" type="submit">購入手続きへ</button>
 </form>
 <hr>
 
@@ -38,7 +38,7 @@
 <form method="POST" action="{{ route('cart.delete',['id' =>$item['itemId'],'color' =>$item['color'],'size' =>$item['size']]) }}">
   @csrf
   @method('DELETE')
-  <button type="submit">削除</button>
+  <button class="button" type="submit">削除</button>
 </form>
 <hr>
 @endforeach

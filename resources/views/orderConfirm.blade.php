@@ -39,7 +39,7 @@ $url = env('APP_URL');
       <p>{{$user_info['prefecture']}}{{$user_info['city']}}{{$user_info['address1']}}{{$user_info['address2']}}</p>
       <p>支払い方法：{{$user_info['pay']}}</p>
       @if($user_info['pay'] !== 'credit')
-      <button type="submit">注文確定</button>
+      <button class="button" type="submit">注文確定</button>
       @endif
 </form>
 @if($user_info['pay'] === 'credit')
@@ -83,7 +83,7 @@ $url = env('APP_URL');
       </div>
       <div id="payment-message" class="hidden"></div>
       <!-- <button id="submit" onClick="checkStatus()"> -->
-      <button id="submit">
+      <button class="button" id="submit">
             <div class="spinner hidden" id="spinner"></div>
             <span id="button-text">注文確定</span>
       </button>
@@ -92,7 +92,8 @@ $url = env('APP_URL');
 <script>
       // This is your test publishable API key.
       // async function btnstripe(){
-      const stripe = Stripe("pk_test_51N2o9WL7ySdWxWBC0GVLhnK80yv58Y4iZBox4reW9wNz8EYQZoNKNLS26ssSNXwlLYUGNIJ8YfxJwsPsdNZuP8JV00HVencmzu");
+      const stripe = Stripe(env('STRIPE_PUBLIC_KEY'));
+      // const stripe = Stripe("pk_test_51N2o9WL7ySdWxWBC0GVLhnK80yv58Y4iZBox4reW9wNz8EYQZoNKNLS26ssSNXwlLYUGNIJ8YfxJwsPsdNZuP8JV00HVencmzu");
       const csrfToken = "{{ csrf_token() }}";
       // The items the customer wants to buy
       // const items = [{{$allSum}}];
@@ -255,9 +256,5 @@ $url = env('APP_URL');
                   document.querySelector("#button-text").classList.remove("hidden");
             }
       }
-
-
-      // }
 </script>
-
-</html>
+@endsection

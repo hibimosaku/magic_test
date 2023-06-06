@@ -34,6 +34,16 @@ ul {
     list-style: none;
 }
 
+input {
+    border: 1px solid black;
+    border-radius: 0.2rem;
+}
+select {
+    border: 1px solid black;
+    border-radius: 0.2rem;
+
+}
+
 /* クラス共通 */
 .flex {
     display: flex;
@@ -58,10 +68,12 @@ ul {
 
 .button {
     position: relative;
-    display: block;
+    // display: block;
     color: #fff;
     text-align: center;
     border-radius: 3rem;
+    background-color: blue;
+    padding: 0.5rem 1rem;
 }
 .button-icon {
     position: absolute;
@@ -104,12 +116,14 @@ ul {
 // レイアウト
 .container-nav {
     padding-top: 3.4rem;
+    min-height: 100vh;
+    
     display: grid;
     grid-template-columns: 10rem 1fr;
     grid-template-rows: 1fr 100px;
     grid-template-areas: 
-        "lnav main"
-        "footer footer"
+    "lnav main"
+    "footer footer"
     ;
     .main {
         grid-area: main;
@@ -126,6 +140,7 @@ ul {
 }
 .container-nonav {
     padding-top: 3.4rem;
+    min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 100px;

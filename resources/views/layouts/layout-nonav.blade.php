@@ -11,7 +11,7 @@
   <!-- Scripts -->
   <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
   @vite(['resources/css/style.scss'])
-  <link rel="stylesheet" href="{{ asset('css/stripe.css') }}">
+  <!-- <link rel="stylesheet" href="{{ asset('css/stripe.css') }}"> -->
   <!-- <link rel="stylesheet" href="{{ asset('css/test.scss') }}"> -->
 
   <script src="https://js.stripe.com/v3/"></script>
@@ -20,7 +20,7 @@
 </head>
 
 <body>
-  @include('components.Header')
+  @include('components.header')
   <div class="container-nonav">
     <main class="main">
       @yield('content')

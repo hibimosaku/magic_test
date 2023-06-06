@@ -2,7 +2,7 @@
 
 @section('content')
 
-<a href="{{route('top')}}">戻る</a>
+
 <form method="POST" action="{{ route('cart.add') }}">
   @csrf
   <input type="hidden" name="item_id" value="{{ $item->id }}">
@@ -28,9 +28,10 @@
       @endfor
   </select><br>
   <p id="sum"></p>
-  <button type="submit">カートに入れる</button>
+  <a class="button" href="{{route('top')}}">戻る</a><button class="button" type="submit">カートに入れる</button>
 </form>
-<a href="{{route('cart.index')}}">カートに移動する</a>
+<br>
+<a class="button" href="{{route('cart.index')}}">カートに移動する</a>
 
 <script>
   // 初期値の設定
