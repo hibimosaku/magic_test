@@ -20,7 +20,7 @@
 </head>
 
 <body>
-  @include('components.Header')
+  @include('components.header')
   <div class="container-nav">
     <nav class="lnav">ローカルナビ</nav>
     <main class="main">
