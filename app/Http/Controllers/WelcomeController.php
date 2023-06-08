@@ -16,7 +16,6 @@ class WelcomeController extends Controller
 {
     public function index(Request $request)
     {
-
         $query = Item::where('is_selling', true);
 
         if ($request->category !== null && $request->category != 0) {
@@ -38,9 +37,7 @@ class WelcomeController extends Controller
             $query->whereRaw('LOWER(name) LIKE ?', ['%' . $keyword . '%']);
         }
 
-
-
-        $items = $query->paginate(3);
+        $items = $query->paginate(5);
 
         $categories = SecondaryCategory::all();
 

@@ -1,10 +1,17 @@
 @charset "UTF-8";
 
+// 変数
+$primary-color: #ff0000;
+$secondary-color: #00ff00;
+$border-color:#333;
+
+
 /* 要素共通 */
 body {
     font-family: "Noto Sans JP", sans-serif;
     font-weight: 400;
-    color: #000;
+    color: #333;
+    ;
 }
 
 @media (min-width: 768px) {
@@ -224,4 +231,25 @@ footer {
     color: #999;
     pointer-events: none;
     cursor: default;
+}
+
+// welcome
+.search {
+    padding-top: 2rem;
+
+}
+.items {
+    padding-top: 2rem;
+    display: grid;
+    gap: 0.7rem;
+    grid-template-columns: repeat(1,1fr);
+    .items__item{
+        border: 1px solid $border-color;
+        border-radius: 0.2rem;
+        padding: 0.5rem;
+        
+    }
+    @media screen and (min-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
 }
