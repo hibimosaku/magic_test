@@ -14,7 +14,7 @@
   <!-- <link rel="stylesheet" href="{{ asset('css/stripe.css') }}"> -->
   <!-- <link rel="stylesheet" href="{{ asset('css/test.scss') }}"> -->
 
-  <script src="https://js.stripe.com/v3/"></script>
+  <!-- <script src="https://js.stripe.com/v3/"></script> -->
 
 
 </head>

@@ -10,12 +10,9 @@ if (empty($cart)) {
 
 ?>
 
-<a class="button" href="{{route('top')}}">topに戻る</a><br>
-<a class="button" href="{{route('cart.index')}}">カートに戻る</a><br>
-
 <form method="GET" action="{{ route('order.indexConfirm') }}">
   @csrf
-  <button type="submit">購入確認</button><br>
+  <button type="submit" class="button">購入確認</button><br>
 
   <input type="hidden" name="cart" value="{{ json_encode($cart) }}">
   @foreach($cart as $item)

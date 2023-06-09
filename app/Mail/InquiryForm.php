@@ -31,7 +31,7 @@ class InquiryForm extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: '問い合わせメール',
+            subject: '問い合わせメール（自動送信）',
         );
     }
 
@@ -43,7 +43,7 @@ class InquiryForm extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mail',
+            view: 'emails.inquiryReceived',
         );
     }
 

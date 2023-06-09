@@ -14,9 +14,6 @@ $url = env('APP_URL');
       <script src="https://js.stripe.com/v3/"></script>
 </head>
 
-<a href="{{route('top')}}">topに戻る</a><br>
-<a href="{{route('cart.index')}}">カートに戻る</a><br>
-<a href="{{route('order.index')}}">購入手続きに戻る</a><br>
 
 <form method="GET" action="{{route('order.success')}}">
       @csrf
@@ -92,9 +89,10 @@ $url = env('APP_URL');
 <script>
       // This is your test publishable API key.
       // async function btnstripe(){
-      const stripe = Stripe(env('STRIPE_PUBLIC_KEY'));
-      // const stripe = Stripe("pk_test_51N2o9WL7ySdWxWBC0GVLhnK80yv58Y4iZBox4reW9wNz8EYQZoNKNLS26ssSNXwlLYUGNIJ8YfxJwsPsdNZuP8JV00HVencmzu");
+      // const stripe = Stripe(env('STRIPE_PUBLIC_KEY'));
+      const stripe = Stripe("pk_test_51N2o9WL7ySdWxWBC0GVLhnK80yv58Y4iZBox4reW9wNz8EYQZoNKNLS26ssSNXwlLYUGNIJ8YfxJwsPsdNZuP8JV00HVencmzu");
       const csrfToken = "{{ csrf_token() }}";
+      console.log(csrfToken)
       // The items the customer wants to buy
       // const items = [{{$allSum}}];
       const pay = "{{$user_info['pay']}}";
