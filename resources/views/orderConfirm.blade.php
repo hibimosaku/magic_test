@@ -4,9 +4,6 @@ $url = env('APP_URL');
 
 @extends('layouts.layout-nonav')
 
-
-
-
 @section('content')
 
 <head>
@@ -92,7 +89,6 @@ $url = env('APP_URL');
       // const stripe = Stripe(env('STRIPE_PUBLIC_KEY'));
       const stripe = Stripe("pk_test_51N2o9WL7ySdWxWBC0GVLhnK80yv58Y4iZBox4reW9wNz8EYQZoNKNLS26ssSNXwlLYUGNIJ8YfxJwsPsdNZuP8JV00HVencmzu");
       const csrfToken = "{{ csrf_token() }}";
-      console.log(csrfToken)
       // The items the customer wants to buy
       // const items = [{{$allSum}}];
       const pay = "{{$user_info['pay']}}";

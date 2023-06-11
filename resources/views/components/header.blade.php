@@ -7,18 +7,14 @@
   @endauth
   <nav class="header_nav">
     <ul class="header_menu">
-      <li><a href="{{route('top')}}">TOP</a></li>
+      <li><a href="{{route('item.showAll')}}">商品一覧</a></li>
+      <li><a href="{{route('guide')}}">利用者ガイド</a></li>
       <li><a href="{{route('cart.index')}}">カート</a></li>
       <li><a href="{{route('inquiry')}}">お問い合わせ</a></li>
       @if (Route::has('login'))
       @auth
       <li><a href="{{route('profile.edit')}}">プロフィール</a></li>
       <li>
-        <!-- <a href="{{route('logout')}}">ログアウト</a> -->
-        <!-- <form method="POST" action="{{ route('logout') }}">
-          @csrf
-          ログアウト
-        </form> -->
         <form method="POST" action="{{ route('logout') }}">
           @csrf
           <a :href="route('logout')" onclick="event.preventDefault();

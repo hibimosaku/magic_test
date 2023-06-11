@@ -5,6 +5,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,16 +22,30 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomeController::class, 'index'])->name('top');
 // Route::get('/inquiry', [InquiryController::class, 'index'])->name('inquiry');
-Route::get('item/{id}', [WelcomeController::class, 'show'])->name('item.show');
+Route::get('/guide', function () {
+    return view('guide');
+})->name('guide');
+
 
 // verified ミドルウェアは、 Illuminate\Auth\Middleware\EnsureEmailIsVerified クラスで提供されており、このミドルウェアが適用されたルートにアクセスする場合、ログインしているユーザーがメールアドレスの確認を済ませていない場合、そのユーザーは email/verify ページにリダイレクトされます。
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::prefix('item')->group(function () {
+    Route::get('/', [ItemController::class, 'showAll'])->name('item.showAll');
+    // Route::get('/category/{secondarycategory}', [ItemController::class, 'showByCategory'])->name('item.showByCategory');
+    // Route::get('/category/{secondarycategory}/{primarycategory}', [ItemController::class, 'showByCategory'])->name('item.showByCategory');
+    Route::get('/category/{secondarycategory}', [ItemController::class, 'showBySecondaryCategory'])->name('item.showBySecondaryCategory');
+    Route::get('/category/{secondarycategory}/{primarycategory}', [ItemController::class, 'showByPrimaryCategory'])->name('item.showByPrimaryCategory');
+    Route::get('/{id}', [ItemController::class, 'show'])->name('item.show');
+});
+
+
 Route::prefix('inquiry')->group(function () {
     Route::get('/', [InquiryController::class, 'index'])->name('inquiry');
     Route::get('/send', [InquiryController::class, 'send'])->name('inquiry.send');
+    Route::get('/success', [InquiryController::class, 'success'])->name('inquiry.success');
 });
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');

@@ -50,7 +50,11 @@ select {
     border-radius: 0.2rem;
 
 }
+textarea {
+    border: 1px solid black;
+    border-radius: 0.2rem;
 
+}
 /* クラス共通 */
 .flex {
     display: flex;
@@ -130,15 +134,13 @@ select {
     grid-template-rows: 1fr 100px;
     grid-template-areas: 
     "lnav main"
-    "footer footer"
+    "lnav footer"
     ;
     .main {
         grid-area: main;
     }
     .lnav {
         grid-area: lnav;
-        background-color: #8fffd4;
-        
     }
     .footer {
         grid-area: footer;
@@ -179,6 +181,7 @@ select {
 .header_menu {
     display: flex;
     margin-right: 1rem;
+    font-size: 0.8rem;
 
     li + li{
         margin-left: 1rem;
@@ -189,6 +192,19 @@ select {
 // main
 // .main {
 // }
+
+// ナビ
+    
+.lnav{
+    background-color: #8fffd4;
+    position: fixed;
+    width: 10rem;
+    height: 100%;
+    ul ul {
+        margin-left: 1em;
+    }
+}
+
 
 // フッター
 footer {

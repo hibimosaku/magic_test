@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class InquiryForm extends Mailable
+class OrderReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -24,26 +24,26 @@ class InquiryForm extends Mailable
     }
 
     /**
-     * Get the message envelope.タイトル
+     * Get the message envelope.
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
     public function envelope()
     {
         return new Envelope(
-            subject: '問い合わせメール（自動送信）',
+            subject: 'Order Received',
         );
     }
 
     /**
-     * Get the message content definition.本文
+     * Get the message content definition.
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
     public function content()
     {
         return new Content(
-            view: 'emails.inquiryReceived',
+            view: 'emails.order.orderReceived',
         );
     }
 

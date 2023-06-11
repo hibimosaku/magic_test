@@ -1,6 +1,6 @@
 @extends('layouts.layout-nav')
 
 @section('content')
-<div>hero画面</div>
-<div>情報</div>
+<div>利用者ガイド</div>
+
 @endsection

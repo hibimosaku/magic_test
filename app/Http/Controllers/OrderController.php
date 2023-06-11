@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Purchase;
 use App\Models\Item;
 use App\Models\PurchaseDetail;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderReceived;
+
 
 
 class OrderController extends Controller
@@ -144,18 +147,25 @@ class OrderController extends Controller
 
     public function success(request $request)
     {
-        if ($request->pay == 'cash' || $request->pay == 'bank') {
+        if (!Session::has('cart') || !Session::has('user_info')) {
+            return redirect()->route('order.fail');
+        }
+
+        $user_info = Session::get('user_info');
+        $pay = $user_info['pay'];
+        $email = $user_info['email'];
+
+        if ($pay == 'cash' || $pay == 'bank') {
             if (!Session::has('cart') || !Session::has('user_info')) {
                 return redirect()->route('order.fail');
             }
         }
 
-
-        if ($request->pay == 'cash') {
+        if ($pay == 'cash') {
             createDb('cash', '');
             // メール送信
-
-        } elseif ($request->pay == 'bank') {
+            Mail::to($email)->cc($email)->send(new OrderReceived($request));
+        } elseif ($pay == 'bank') {
             createDb('bank', '');
             // メール送信
         } else {
@@ -169,7 +179,7 @@ class OrderController extends Controller
 
         // cart情報削除
         session()->flush();
-        return view('success');
+        return view('success', compact('pay'));
     }
 
     public function fail()

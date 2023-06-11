@@ -1,30 +1,26 @@
-<?php
-$url = env('APP_URL');
-?>
+@extends('layouts.layout-nonav')
+
+@section('content')
+注文を受け付けました。<br>
+ありがとうございます。<br>
+メール（自動送信）でお送りしています。<br>
 
 
-<!DOCTYPE html>
-<html lang="en">
+@if($pay == 'cash')
+代引きで受け付けました。<br>
+Tシャツをお送りいたしますので、その際、お支払いよろしくお願いします。<br>
+@elseif($pay == 'bank')
+振込で受け付けました。<br>
+後日、振込先をメールでお送りします。<br>
+振込確認後、Tシャツをお送りいたします。<br>
+@elseif($pay == 'credit')
+クレジット支払いで受け付けました。<br>
+Tシャツをお送りいたします。<br>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
+@else
+他。失敗しているかも。
 
-<body>
-  <a href="{{route('top')}}">topに戻る</a><br>
+@endif
 
-
-  <script>
-    window.onpopstate = function(event) {
-      window.location.href = "{{$url}}";
-    };
-  </script>
-</body>
-
-</html>
-
-成功しました。
 {{request()->query('redirect_status')}}
+@endsection

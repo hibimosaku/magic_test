@@ -1,4 +1,4 @@
-@extends('layouts.layout-nonav')
+@extends('layouts.layout-nav')
 @section('content')
 @if(!$cart)
 <p>カート空です</p>
@@ -10,7 +10,6 @@
 </form>
 <hr>
 
-<!-- <a href="{{ url()->previous() }}">前のページに移動</a><br> -->
 @foreach($cart as $item)
 <a href="{{route('item.show',['id' => $item['itemId']])}}">商品のページに戻る</a><br>
 <img style="height:50px;" src="{{ asset('images/'. $item['image1'] ?? '') }}">
