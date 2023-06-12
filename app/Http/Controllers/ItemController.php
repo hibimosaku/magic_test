@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Product;
 use App\Models\SizeDetail;
 use App\Models\SecondaryCategory;
+use App\Models\PrimaryCategory;
 
 
 class ItemController extends Controller
@@ -21,7 +22,7 @@ class ItemController extends Controller
 
         if ($request->order === 'priceHigh') {
             $query->orderBy('price', 'desc');
-        } elseif ($request->order === 'low') {
+        } elseif ($request->order === 'priceLow') {
             $query->orderBy('price', 'asc');
         } elseif ($request->order === 'latest') {
             $query->orderBy('created_at', 'desc');
@@ -50,15 +51,57 @@ class ItemController extends Controller
         return view('items.item', compact(['products', 'item', 'sizes']));
     }
 
-    public function showBySecondaryCategory($secondarycategory)
+    public function showByPrimaryCategory(Request $request, $primarycategoryid)
     {
+        // $query = Item::where('secondary_category_id', $primarycategoryid);
+        $query = Item::whereHas('secondaryCategory', function ($query) use ($primarycategoryid) {
+            $query->where('primary_category_id', $primarycategoryid);
+        });
+        if ($request->category !== null && $request->category != 0) {
+            $query->where('secondary_category_id', $request->category);
+        }
 
-        return view('items.secondaryCategory');
+        if ($request->order === 'priceHigh') {
+            $query->orderBy('price', 'desc');
+        } elseif ($request->order === 'priceLow') {
+            $query->orderBy('price', 'asc');
+        } elseif ($request->order === 'latest') {
+            $query->orderBy('created_at', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $items = $query->paginate(10);
+
+        $primarycategory = PrimaryCategory::where('id', $primarycategoryid)->first();
+        $secondarycategory = SecondaryCategory::where('primary_category_id', $primarycategoryid)->get();
+
+
+
+        return view('items.primaryCategory', compact('primarycategory', 'secondarycategory', 'items', 'request'));
     }
 
-    public function showByPrimaryCategory($secondarycategory, $primarycategory)
+    public function showBySecondaryCategory(Request $request, $primarycategoryid, $secondarycategoryid)
     {
+        $query = Item::where('is_selling', true)->where('secondary_category_id', $secondarycategoryid);
 
-        return view('items.primaryCategory');
+        if ($request->order === 'priceHigh') {
+            $query->orderBy('price', 'desc');
+        } elseif ($request->order === 'priceLow') {
+            $query->orderBy('price', 'asc');
+        } elseif ($request->order === 'latest') {
+            $query->orderBy('created_at', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
+        if ($request->keyword) {
+            $keyword = strtolower($request->keyword);
+            $query->whereRaw('LOWER(name) LIKE ?', ['%' . $keyword . '%']);
+        }
+
+        $items = $query->paginate(10);
+        $category = SecondaryCategory::where('id', $secondarycategoryid)->first();
+        return view('items.secondaryCategory', compact('items', 'category', 'request'));
     }
 }

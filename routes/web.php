@@ -34,10 +34,8 @@ Route::get('/dashboard', function () {
 
 Route::prefix('item')->group(function () {
     Route::get('/', [ItemController::class, 'showAll'])->name('item.showAll');
-    // Route::get('/category/{secondarycategory}', [ItemController::class, 'showByCategory'])->name('item.showByCategory');
-    // Route::get('/category/{secondarycategory}/{primarycategory}', [ItemController::class, 'showByCategory'])->name('item.showByCategory');
-    Route::get('/category/{secondarycategory}', [ItemController::class, 'showBySecondaryCategory'])->name('item.showBySecondaryCategory');
-    Route::get('/category/{secondarycategory}/{primarycategory}', [ItemController::class, 'showByPrimaryCategory'])->name('item.showByPrimaryCategory');
+    Route::get('/category/{primarycategoryid}', [ItemController::class, 'showByPrimaryCategory'])->name('item.showByPrimaryCategory');
+    Route::get('/category/{primarycategoryid}/{secondarycategoryid}', [ItemController::class, 'showBySecondaryCategory'])->name('item.showBySecondaryCategory');
     Route::get('/{id}', [ItemController::class, 'show'])->name('item.show');
 });
 

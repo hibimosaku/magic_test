@@ -18,7 +18,7 @@
       <input type="radio" name="order" value="no" @if(e(Request::get('order')==="no" )) checked @endif checked>変更なし
       <input type="radio" name="order" value="latest" @if(e(Request::get('order')==="latest" )) checked @endif>最新順
       <input type="radio" name="order" value="priceHigh" @if(e(Request::get('order')==="priceHigh" )) checked @endif>価格高い順
-      <input type="radio" name="order" value="pricelow" @if(e(Request::get('order')==="pricelow" )) checked @endif>価格低い順
+      <input type="radio" name="order" value="priceLow" @if(e(Request::get('order')==="priceLow" )) checked @endif>価格低い順
     </p>
   </form>
   <p>件数：{{$items->total()}}件</p>

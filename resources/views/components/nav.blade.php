@@ -5,14 +5,14 @@
     $primaryCategoryObject = $categories->first()->primaryCategory;
     @endphp
     <li>
-      <a href="{{ route('item.showBySecondaryCategory', ['secondarycategory' => $primaryCategoryObject]) }}">
+      <a href="{{ route('item.showByPrimaryCategory', ['primarycategoryid' => $primaryCategoryObject]) }}">
         {{ $primaryCategoryObject->name }}
       </a>
     </li>
     <ul>
       @foreach($categories as $category)
       <li>
-        <a href="{{ route('item.showByPrimaryCategory', ['secondarycategory' => $primaryCategoryObject,'primarycategory'=>$category->id]) }}">
+        <a href="{{ route('item.showBySecondaryCategory', ['primarycategoryid' => $primaryCategoryObject,'secondarycategoryid'=>$category->id]) }}">
           {{ $category->name }}
         </a>
       </li>
