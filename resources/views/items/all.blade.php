@@ -1,11 +1,12 @@
 @extends('layouts.layout-nav')
 
 @section('content')
+
 {{ $items->links('pagination') }}
 <!-- カテゴリ分類 -->
 <!-- formに書いているcategoryはselectのnameのこと -->
 <section class="search">
-  <form action="{{route('top',['category','order','keyword'])}}">
+  <form action="{{route('item.showAll',['category','order','keyword'])}}">
     @csrf
     検索キーワード：<input id="keyword" style="border:1px solid black;" type="search" name="keyword" value={{Request::get('keyword')}}><br>
     カテゴリー：<select name="category" id="category">

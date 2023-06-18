@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\SizeDetail;
 use App\Models\SecondaryCategory;
 use App\Models\PrimaryCategory;
+use Illuminate\Support\Facades\Session;
+
 
 
 class ItemController extends Controller
@@ -44,16 +46,21 @@ class ItemController extends Controller
 
     public function show($id)
     {
+
         $item = Item::findOrFail($id);
         $products = Product::where('item_id', $id)->get();
         $sizeId = $item->size_id;
         $sizes = SizeDetail::where('size_id', $sizeId)->get();
+
+        $itemId = $item->id;
+        $color = $item->color;
+        $size = $item->size;
+
         return view('items.item', compact(['products', 'item', 'sizes']));
     }
 
     public function showByPrimaryCategory(Request $request, $primarycategoryid)
     {
-        // $query = Item::where('secondary_category_id', $primarycategoryid);
         $query = Item::whereHas('secondaryCategory', function ($query) use ($primarycategoryid) {
             $query->where('primary_category_id', $primarycategoryid);
         });

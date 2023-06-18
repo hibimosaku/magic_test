@@ -116,7 +116,6 @@ $url = env('APP_URL');
                   ],
                   allSum: "{{$allSum}}"
             };
-            console.log('1', "{{$url}}");
             const {
                   clientSecret,
                   paymentId

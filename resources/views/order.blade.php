@@ -23,6 +23,7 @@ if (empty($cart)) {
   <p>サイズ：{{$item['sizeName']}}</p>
   <p>価格：{{number_format($item['price'])}}円</p>
   <p>数：{{$item['num']}}</p>
+  <p>名入れ1：{{$item['name_print1']}}</p>
   <p>合計：{{number_format($item['price']*$item['num'])}}円</p>
   <hr>
   @endforeach

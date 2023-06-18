@@ -9,6 +9,7 @@ use App\Models\Purchase;
 use App\Models\Item;
 use App\Models\PurchaseDetail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use App\Mail\OrderReceived;
 
 
@@ -30,8 +31,32 @@ class OrderController extends Controller
             // abort(500);//エラー画面にいく
         } else {
             $cart = json_decode($request->input('cart'), true);
-        }
+            // dd($cart);
+            foreach ($cart as $item) {
+                if (is_array($item)) {
+                    $rules = [
+                        'name_print1' => isset($item['name_print_num']) && $item['name_print_num'] > 0 ? 'required|max:15' : '',
+                        // 'name_print2' => isset($item['name_print_num']) && $item['name_print_num'] > 1 ? 'required|max:15' : '',
+                        // 'name_print3' => isset($item['name_print_num']) && $item['name_print_num'] > 2 ? 'required|max:15' : '',
+                    ];
 
+                    $messages = [
+                        'name_print1.required' => '名入れ1は必須項目です。',
+                        // 'name_print2.required' => '名入れ2は必須項目です。',
+                        // 'name_print3.required' => '名入れ3は必須項目です。',
+                    ];
+
+                    $validator = Validator::make($item, $rules, $messages);
+
+                    if ($validator->fails()) {
+                        $errors = $validator->errors()->all();
+                        // エラーメッセージの処理
+                        session()->flash('errors', $errors);
+                        return redirect()->back()->withInput();
+                    }
+                }
+            }
+        }
         $allSum = 0;
         foreach ($cart as $key => $item) {
             if (isSelling($item) === 0) {

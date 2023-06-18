@@ -39,7 +39,6 @@ Route::prefix('item')->group(function () {
     Route::get('/{id}', [ItemController::class, 'show'])->name('item.show');
 });
 
-
 Route::prefix('inquiry')->group(function () {
     Route::get('/', [InquiryController::class, 'index'])->name('inquiry');
     Route::get('/send', [InquiryController::class, 'send'])->name('inquiry.send');
@@ -48,12 +47,13 @@ Route::prefix('inquiry')->group(function () {
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('add', [CartController::class, 'add'])->name('cart.add');
-    Route::put('cart/{id}/{color}/{size}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('cart/{id}/{color}/{size}', [CartController::class, 'delete'])->name('cart.delete');
+    Route::put('updateNum/{id}/{color}/{size}', [CartController::class, 'updateNum'])->name('cart.updateNum');
+    Route::put('updateName/{id}/{color}/{size}', [CartController::class, 'updateName'])->name('cart.updateName');
+    Route::delete('{id}/{color}/{size}', [CartController::class, 'delete'])->name('cart.delete');
     Route::post('sessionStripe', [CartController::class, 'sessionStripe'])->name('cart.sessionStripe');
 });
 Route::prefix('order')->group(function () {
-    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+    Route::post('/', [OrderController::class, 'index'])->name('order.index');
     Route::get('confirm', [OrderController::class, 'indexConfirm'])->name('order.indexConfirm');
     Route::post('checkout', [OrderController::class, 'checkout'])->name('order.checkout');
     Route::get('success', [OrderController::class, 'success'])->name('order.success');
