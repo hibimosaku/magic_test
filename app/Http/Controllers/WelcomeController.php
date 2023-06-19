@@ -17,9 +17,16 @@ class WelcomeController extends Controller
 {
     public function index()
     {
-        // $secondaryCategories = SecondaryCategory::all();
-        // $primaryCategories = PrimaryCategory::all();
-        return view('welcome');
-        // return view('welcome', compact('secondaryCategories', 'primaryCategories'));
+        $imageFiles = scandir(public_path('images/hero'));
+        $images = [];
+
+        foreach ($imageFiles as $file) {
+            if ($file !== '.' && $file !== '..') {
+                $images[] = asset('images/hero/' . $file);
+            }
+        }
+
+
+        return view('welcome', compact('images'));
     }
 };

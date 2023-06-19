@@ -36,7 +36,7 @@
       <p>カテゴリー：{{ $item->secondaryCategory->name}}</p>
       <p>{{ number_format($item->price) }}円</p>
       <p>作成日：{{ $item->created_at }}</p>
-      <img style="height:50px;" src="{{ asset('images/'. $item->imageFirst->filename) }}">
+      <img style="height:50px;" src="{{ asset('images/item/'. $item->imageFirst->filename) }}">
       @else
       <p>画像なし</p>
       @endif

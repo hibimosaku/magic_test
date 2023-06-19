@@ -8,10 +8,10 @@
   <input type="hidden" name="item_id" value="{{ $item->id }}">
   <input type="hidden" name="name_print_num" value="{{ $item->name_print_num }}">
   <p>商品名：{{ $item->name }}</p>
-  <img style="height:50px;" src="{{ asset('images/'. $item->imageFirst->filename ?? '') }}">
-  <img style="height:50px;" src="{{ asset('images/'. $item->imageSecond->filename ?? '') }}">
-  <img style="height:50px;" src="{{ asset('images/'. $item->imageThird->filename ?? '') }}">
-  <img style="height:50px;" src="{{ asset('images/'. $item->imageFourth->filename ?? '') }}">
+  <img style="height:50px;" src="{{ asset('images/item/'. $item->imageFirst->filename ?? '') }}">
+  <img style="height:50px;" src="{{ asset('images/item/'. $item->imageSecond->filename ?? '') }}">
+  <img style="height:50px;" src="{{ asset('images/item/'. $item->imageThird->filename ?? '') }}">
+  <img style="height:50px;" src="{{ asset('images/item/'. $item->imageFourth->filename ?? '') }}">
   <p>商品説明：{{ $item->information }}</p>
   <p id="price">価格：{{ number_format($item->price) }}円</p>
   色：<select name="color" id="">

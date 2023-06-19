@@ -17,10 +17,10 @@ $url = env('APP_URL');
 
 @foreach($cart as $item)
 <a href="{{route('item.show',['id' => $item['itemId']])}}">商品のページに戻る</a><br>
-<img style="height:50px;" src="{{ asset('images/'. $item['image1'] ?? '') }}">
-<img style="height:50px;" src="{{ asset('images/'. $item['image2'] ?? '') }}">
-<img style="height:50px;" src="{{ asset('images/'. $item['image3'] ?? '') }}">
-<img style="height:50px;" src="{{ asset('images/'. $item['image4'] ?? '') }}">
+<img style="height:50px;" src="{{ asset('images/item/'. $item['image1'] ?? '') }}">
+<img style="height:50px;" src="{{ asset('images/item/'. $item['image2'] ?? '') }}">
+<img style="height:50px;" src="{{ asset('images/item/'. $item['image3'] ?? '') }}">
+<img style="height:50px;" src="{{ asset('images/item/'. $item['image4'] ?? '') }}">
 <p class="abc">名前：{{$item['name']}}</p>
 <p>色：{{$item['colorName']}}</p>
 <p>サイズ：{{$item['sizeName']}}</p>
