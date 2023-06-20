@@ -19,7 +19,10 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained();
             $table->foreignId('size_detail_id')->constrained();
             $table->integer('num');
-            $table->integer('price');            
+            $table->integer('price');
+            $table->string('name_print1')->nullable();
+            $table->string('name_print2')->nullable();
+            $table->string('name_print3')->nullable();
             $table->timestamps();
         });
     }

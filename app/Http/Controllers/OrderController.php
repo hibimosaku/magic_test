@@ -254,6 +254,10 @@ function createDb($pay, $user_id)
         $purchaseDetail->size_detail_id = $item['size'];
         $purchaseDetail->num = $item['num'];
         $purchaseDetail->price = $item['price'];
+        $purchaseDetail->name_print1 = $item['name_print1'] ?? null;
+        $purchaseDetail->name_print2 = $item['name_print2'] ?? null;
+        $purchaseDetail->name_print3 = $item['name_print3'] ?? null;
+
         $purchaseDetail->save();
     }
 }

@@ -16,12 +16,22 @@ $url = env('APP_URL');
       @csrf
       <input type="hidden" name="cart" value="{{json_encode($cart)}}">
       @foreach($cart as $item)
-      <img style="height:50px;" src="{{ asset('images/'. $item['image1'] ?? '') }}">
+      <img style="height:50px;" src="{{ asset('images/item/'. $item['image1'] ?? '') }}">
       <p>名前：{{$item['name']}}</p>
       <p>色：{{$item['colorName']}}</p>
       <p>サイズ：{{$item['sizeName']}}</p>
       <p>価格：{{number_format($item['price'])}}円</p>
       <p>数：{{$item['num']}}</p>
+      @if($item['name_print_num'] > 0)
+      <p>名入れ1：{{$item['name_print1']}}</p>
+      @endif
+      @if($item['name_print_num'] > 1)
+      <p>名入れ2：{{$item['name_print2']}}</p>
+      @endif
+      @if($item['name_print_num'] > 2)
+      <p>名入れ3：{{$item['name_print3']}}</p>
+      @endif
+
       <p>合計：{{number_format($item['price']*$item['num'])}}円</p>
       <hr>
       @endforeach
