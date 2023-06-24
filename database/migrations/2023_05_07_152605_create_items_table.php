@@ -27,6 +27,7 @@ return new class extends Migration
             $table->foreignId('image3')->nullable()->constrained('images');
             $table->foreignId('image4')->nullable()->constrained('images');
             $table->integer('name_print_num');
+            $table->boolean('image_print');
             $table->timestamps();
         });
     }

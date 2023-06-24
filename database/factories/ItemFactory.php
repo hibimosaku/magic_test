@@ -31,6 +31,7 @@ class ItemFactory extends Factory
             'image3' => $this->faker->numberBetween(1, 6),
             'image4' => $this->faker->numberBetween(1, 6),
             'name_print_num' => $faker->randomElement([0, 1, 2, 3]),
+            'image_print' => $faker->numberBetween(0, 1),
             'created_at' => $this->faker->dateTime,
         ];
     }

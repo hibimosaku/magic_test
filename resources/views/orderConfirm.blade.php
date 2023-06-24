@@ -31,6 +31,9 @@ $url = env('APP_URL');
       @if($item['name_print_num'] > 2)
       <p>名入れ3：{{$item['name_print3']}}</p>
       @endif
+      @if($item['image_path'])
+      <img src="{{ asset('storage/' . $item['image_path']) }}" alt="画像">
+      @endif
 
       <p>合計：{{number_format($item['price']*$item['num'])}}円</p>
       <hr>

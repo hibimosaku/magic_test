@@ -37,6 +37,5 @@ class SecondaryCategorySeeder extends Seeder
                 'sort_order' => 2
             ],
         ]);
-
     }
 }

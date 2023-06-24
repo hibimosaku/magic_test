@@ -38,6 +38,9 @@ class CartController extends Controller
             'name_print1' => $request->name_print_num > 0 ? 'required|max:15' : '',
             'name_print2' => $request->name_print_num > 1 ? 'required|max:15' : '',
             'name_print3' => $request->name_print_num > 2 ? 'required|max:15' : '',
+            'image' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 画像ファイルであり、最大サイズは2MBまで
         ], [
             'name_print1.required' => '名入れ1は必須項目です。',
             'name_print1.max' => '名入れ1は25文字以内で入力してください。',
@@ -45,6 +48,10 @@ class CartController extends Controller
             'name_print2.max' => '名入れ1は25文字以内で入力してください。',
             'name_print3.required' => '名入れ3は必須項目です。',
             'name_print3.max' => '名入れ1は25文字以内で入力してください。',
+            'image.required' => '画像は必須項目です。',
+            'image.image' => '有効な画像ファイルを選択してください。',
+            'image.mimes' => '画像はjpeg、png、jpg、gif形式のファイルである必要があります。',
+            'image.max' => '画像サイズは2MB以内でアップロードしてください。',
         ]);
 
         $item = Item::where('id', $request->input('item_id'))->first();
@@ -52,6 +59,16 @@ class CartController extends Controller
         $image2 = Image::where('id', $item->image2)->first();
         $image3 = Image::where('id', $item->image3)->first();
         $image4 = Image::where('id', $item->image4)->first();
+
+
+        $image = $request->file('image');
+        if ($image) {
+            $originalFilename = $image->getClientOriginalName();
+            $extension = $image->getClientOriginalExtension();
+            $uniqueFilename = uniqid() . '_' . pathinfo($originalFilename, PATHINFO_FILENAME);
+            $imagePath = $image->storeAs('images', $uniqueFilename . '.' . $extension, 'public');
+        }
+
         $cart_info = [
             'product_id' => Product::where('item_id', $request->input('item_id'))->where('color_id', $request->input('color'))->first()->id,
             'itemId' => $request->input('item_id'),
@@ -70,6 +87,7 @@ class CartController extends Controller
             'name_print1' => $request->name_print_num > 0 ? $request->input('name_print1') : null,
             'name_print2' => $request->name_print_num > 1 ? $request->input('name_print2') : null,
             'name_print3' => $request->name_print_num > 2 ? $request->input('name_print3') : null,
+            'image_path' => $imagePath ?? null
         ];
         $cart = Session::get('cart', []);
         $exists = false;
@@ -86,6 +104,7 @@ class CartController extends Controller
             $cart[] = $cart_info;
         }
         Session::put('cart', $cart);
+        // dd(Session::get('cart'));
         return back();
         // return redirect()->route('item.show');
 
@@ -124,6 +143,13 @@ class CartController extends Controller
         $cart = Session::get('cart', []);
         foreach ($cart as $index => &$item) {
             if ($item['itemId'] === $id && $item['color'] === $color && $item['size'] === $size) {
+                $imagePathToDelete = $item['image_path'];
+                if (!empty($imagePathToDelete)) {
+                    $fullImagePath = storage_path('app/public/' . $imagePathToDelete);
+                    if (file_exists($fullImagePath)) {
+                        unlink($fullImagePath);
+                    }
+                }
                 unset($cart[$index]);
                 break;
             }
@@ -131,6 +157,7 @@ class CartController extends Controller
         Session::put('cart', $cart);
         return redirect()->route('cart.index');
     }
+
     public function sessionStripe(request $request)
     {
         $hasSession = Session::has('cart');

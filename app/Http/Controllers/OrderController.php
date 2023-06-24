@@ -11,6 +11,7 @@ use App\Models\PurchaseDetail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\OrderReceived;
+use App\Mail\OrderSuccess;
 
 
 
@@ -179,6 +180,7 @@ class OrderController extends Controller
         $user_info = Session::get('user_info');
         $pay = $user_info['pay'];
         $email = $user_info['email'];
+        $cart = Session::get('cart');
 
         if ($pay == 'cash' || $pay == 'bank') {
             if (!Session::has('cart') || !Session::has('user_info')) {
@@ -189,21 +191,36 @@ class OrderController extends Controller
         if ($pay == 'cash') {
             createDb('cash', '');
             // メール送信
-            Mail::to($email)->cc($email)->send(new OrderReceived($request));
+            Mail::to($email)->cc($email)->send(new OrderReceived($user_info, $cart));
         } elseif ($pay == 'bank') {
             createDb('bank', '');
             // メール送信
+            Mail::to($email)->send(new OrderReceived($user_info, $cart));
+            Mail::to($email)->send(new OrderSuccess($user_info, $cart));
         } else {
             createDb('credit', '');
-
             // メール送信
+            Mail::to($email)->cc($email)->send(new OrderReceived($user_info, $cart));
         };
 
         // カート情報取得
 
-
+        // 画像削除
+        $cart = Session::get('cart', []);
+        foreach ($cart as $index => &$item) {
+            $imagePathToDelete = $item['image_path'];
+            unset($cart[$index]);
+            $imagePathToDelete = $item['image_path'];
+            if (!empty($imagePathToDelete)) {
+                $fullImagePath = storage_path('app/public/' . $imagePathToDelete);
+                if (file_exists($fullImagePath)) {
+                    unlink($fullImagePath);
+                }
+            }
+        }
         // cart情報削除
         session()->flush();
+
         return view('success', compact('pay'));
     }
 

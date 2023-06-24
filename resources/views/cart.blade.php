@@ -34,7 +34,9 @@ $url = env('APP_URL');
 @if($item['name_print_num'] > 2)
 <p>名入れ3：{{$item['name_print3']}}</p>
 @endif
-
+@if($item['image_path'])
+<img src="{{ asset('storage/' . $item['image_path']) }}" alt="画像">
+@endif
 
 
 <form method="POST" action="{{ route('cart.updateNum',['id' =>$item['itemId'],'color' =>$item['color'],'size' =>$item['size']]) }}">

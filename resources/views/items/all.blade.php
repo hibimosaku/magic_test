@@ -34,6 +34,18 @@
       @if ($item->imageFirst)
       <!-- <p>{{ $item->imageFirst->filename }}</p> -->
       <p>カテゴリー：{{ $item->secondaryCategory->name}}</p>
+      @if($item['name_print_num'] == 0)
+      名入れなし
+      @else
+      名入れあり
+      @endif<br>
+
+      @if($item['image_print'])
+      画像アップロードあり
+      @else
+      画像アップロードなし
+      @endif<br>
+
       <p>{{ number_format($item->price) }}円</p>
       <p>作成日：{{ $item->created_at }}</p>
       <img style="height:50px;" src="{{ asset('images/item/'. $item->imageFirst->filename) }}">

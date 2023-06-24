@@ -3,7 +3,7 @@
 @section('content')
 
 
-<form method="POST" action="{{ route('cart.add') }}">
+<form method="POST" action="{{ route('cart.add') }}" enctype="multipart/form-data">
   @csrf
   <input type="hidden" name="item_id" value="{{ $item->id }}">
   <input type="hidden" name="name_print_num" value="{{ $item->name_print_num }}">
@@ -42,6 +42,14 @@
   @error('name_print3')
   <p style="color:red;">{{ $message }}</p>
   @enderror
+  @if($item['image_print'])
+  <p>画像</p>
+  <input type="file" name="image">
+  @error('image')
+  <p style="color:red;">{{ $message }}</p>
+  @enderror
+
+  @endif<br>
 
   数：<select name="num">
     @for ($i = 1; $i <= 5; $i++) <option value="{{ $i }}">{{ $i }}</option>

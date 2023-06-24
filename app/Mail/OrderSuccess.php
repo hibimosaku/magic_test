@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Mail\Mailables\Attachment;
 
-class OrderReceived extends Mailable
+class OrderSuccess extends Mailable
 {
     use Queueable, SerializesModels;
     public $cart;
@@ -37,7 +37,7 @@ class OrderReceived extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Order Received',
+            subject: 'Order Success',
         );
     }
 
@@ -49,7 +49,7 @@ class OrderReceived extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.order.orderReceived',
+            view: 'emails.order.orderSuccess',
             with: ([
                 'cart' => $this->cart,
                 'user_ifno' => $this->user_info
@@ -73,7 +73,6 @@ class OrderReceived extends Mailable
                 $attachments[] = Attachment::fromPath($attachmentPath);
             }
         }
-
         return $attachments;
     }
 }
