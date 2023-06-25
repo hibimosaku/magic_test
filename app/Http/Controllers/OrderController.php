@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Purchase;
 use App\Models\Item;
 use App\Models\PurchaseDetail;
+use App\Models\ImagePrint;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\OrderReceived;
@@ -191,7 +192,8 @@ class OrderController extends Controller
         if ($pay == 'cash') {
             createDb('cash', '');
             // メール送信
-            Mail::to($email)->cc($email)->send(new OrderReceived($user_info, $cart));
+            Mail::to($email)->send(new OrderReceived($user_info, $cart));
+            Mail::to($email)->send(new OrderSuccess($user_info, $cart));
         } elseif ($pay == 'bank') {
             createDb('bank', '');
             // メール送信
@@ -200,7 +202,8 @@ class OrderController extends Controller
         } else {
             createDb('credit', '');
             // メール送信
-            Mail::to($email)->cc($email)->send(new OrderReceived($user_info, $cart));
+            Mail::to($email)->send(new OrderReceived($user_info, $cart));
+            Mail::to($email)->send(new OrderSuccess($user_info, $cart));
         };
 
         // カート情報取得
@@ -216,6 +219,8 @@ class OrderController extends Controller
                 if (file_exists($fullImagePath)) {
                     unlink($fullImagePath);
                 }
+                // TB削除
+                ImagePrint::where('filepath', $imagePathToDelete)->delete();
             }
         }
         // cart情報削除

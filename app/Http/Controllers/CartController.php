@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Product;
 use App\Models\Item;
 use App\Models\Image;
+use App\Models\ImagePrint;
 use App\Models\Color;
 use App\Models\Size;
 use App\Models\SizeDetail;
+use Carbon\Carbon;
 
 define('ITEMNUM', 10);
 
@@ -39,8 +41,6 @@ class CartController extends Controller
             'name_print2' => $request->name_print_num > 1 ? 'required|max:15' : '',
             'name_print3' => $request->name_print_num > 2 ? 'required|max:15' : '',
             'image' => 'sometimes|required|image|mimes:jpeg,png,jpg,gif|max:2048',
-
-            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 画像ファイルであり、最大サイズは2MBまで
         ], [
             'name_print1.required' => '名入れ1は必須項目です。',
             'name_print1.max' => '名入れ1は25文字以内で入力してください。',
@@ -62,6 +62,7 @@ class CartController extends Controller
 
 
         $image = $request->file('image');
+        $imagePath = null;
         if ($image) {
             $originalFilename = $image->getClientOriginalName();
             $extension = $image->getClientOriginalExtension();
@@ -104,10 +105,16 @@ class CartController extends Controller
             $cart[] = $cart_info;
         }
         Session::put('cart', $cart);
-        // dd(Session::get('cart'));
-        return back();
-        // return redirect()->route('item.show');
+        if ($imagePath) {
+            ImagePrint::create([
+                'filepath' => $imagePath,
+                'expired_date' => Carbon::now()->addMinutes(env('SESSION_LIFETIME')),
+                'item_id' => $request->input('item_id')
+            ]);
+        }
 
+
+        return back();
     }
 
     public function updateNum(Request $request, $id, $color, $size)
@@ -130,6 +137,7 @@ class CartController extends Controller
         foreach ($cart as $index => &$item) {
             if ($item['itemId'] === $id && $item['color'] === $color && $item['size'] === $size) {
                 $item['name_print1'] = $request->name_print1;
+
                 break;
             }
         }
@@ -148,8 +156,11 @@ class CartController extends Controller
                     $fullImagePath = storage_path('app/public/' . $imagePathToDelete);
                     if (file_exists($fullImagePath)) {
                         unlink($fullImagePath);
+                        // TB削除
+                        ImagePrint::where('filepath', $imagePathToDelete)->delete();
                     }
                 }
+
                 unset($cart[$index]);
                 break;
             }

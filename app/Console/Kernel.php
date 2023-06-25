@@ -2,20 +2,32 @@
 
 namespace App\Console;
 
+use App\Models\ImagePrint;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Storage;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
-     */
+
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+
+        $schedule->call(function () {
+            // ここに画像削除の処理を記述する
+            $expiredImages = ImagePrint::where('expired_date', '<', now())->get();
+
+            foreach ($expiredImages as $image) {
+                // 画像の削除処理
+                if (Storage::disk('public')->exists($image->filepath)) {
+                    Storage::disk('public')->delete($image->filepath);
+                }
+
+                // レコードの削除
+                $image->delete();
+            }
+            // })->daily();
+        })->everyMinute();
     }
 
     /**
@@ -25,7 +37,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

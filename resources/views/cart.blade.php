@@ -38,7 +38,6 @@ $url = env('APP_URL');
 <img src="{{ asset('storage/' . $item['image_path']) }}" alt="画像">
 @endif
 
-
 <form method="POST" action="{{ route('cart.updateNum',['id' =>$item['itemId'],'color' =>$item['color'],'size' =>$item['size']]) }}">
   @csrf
   @method('PUT')
