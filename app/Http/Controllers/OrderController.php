@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\OrderReceived;
 use App\Mail\OrderSuccess;
-
+use App\Util\Util;
 
 
 class OrderController extends Controller
@@ -33,41 +33,19 @@ class OrderController extends Controller
             // abort(500);//エラー画面にいく
         } else {
             $cart = json_decode($request->input('cart'), true);
-            // dd($cart);
-            foreach ($cart as $item) {
-                if (is_array($item)) {
-                    $rules = [
-                        'name_print1' => isset($item['name_print_num']) && $item['name_print_num'] > 0 ? 'required|max:15' : '',
-                        // 'name_print2' => isset($item['name_print_num']) && $item['name_print_num'] > 1 ? 'required|max:15' : '',
-                        // 'name_print3' => isset($item['name_print_num']) && $item['name_print_num'] > 2 ? 'required|max:15' : '',
-                    ];
-
-                    $messages = [
-                        'name_print1.required' => '名入れ1は必須項目です。',
-                        // 'name_print2.required' => '名入れ2は必須項目です。',
-                        // 'name_print3.required' => '名入れ3は必須項目です。',
-                    ];
-
-                    $validator = Validator::make($item, $rules, $messages);
-
-                    if ($validator->fails()) {
-                        $errors = $validator->errors()->all();
-                        // エラーメッセージの処理
-                        session()->flash('errors', $errors);
-                        return redirect()->back()->withInput();
-                    }
-                }
-            }
         }
-        $allSum = 0;
-        foreach ($cart as $key => $item) {
-            if (isSelling($item) === 0) {
-                unset($cart[$key]);
-            } else {
-                $allSum += $item['price'] * $item['num'];
-            }
-        };
-        return view('order', compact(['cart', 'allSum']));
+
+        // セッション更新
+        $updateCart = Util::updateSessionCart($cart);
+
+        Session::put('cart', $updateCart);
+        $cart = Session::get('cart', []);
+
+        $cartSum = Util::calcCartSum($cart);
+        $shippingFee = Util::calcShippingFee($cartSum);
+        $allSum = $cartSum + $shippingFee;
+
+        return view('order', compact(['cart', 'cartSum', 'allSum', 'shippingFee']));
     }
 
 
@@ -77,8 +55,7 @@ class OrderController extends Controller
         if (!session()->has('cart')) {
             return redirect()->route('cart.index');
         };
-
-        $validator = $request->validate([
+        $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255',
             'tel' => 'required|digits_between:10,11',
@@ -105,10 +82,10 @@ class OrderController extends Controller
         ]);
 
         $cart = json_decode($request->input('cart'), true);
-        $allSum = 0;
-        foreach ($cart as $item) {
-            $allSum += $item['price'] * $item['num'];
-        };
+        $cartSum = Util::calcCartSum($cart);
+        $shippingFee = Util::calcShippingFee($cartSum);
+        $allSum = $cartSum + $shippingFee;
+
         $user_info = [
             'name' => $request->name,
             'email' => $request->email,
@@ -122,7 +99,7 @@ class OrderController extends Controller
         ];
 
         Session::put('user_info', $user_info);
-        return view('orderConfirm', compact(['cart', 'allSum', 'user_info']));
+        return view('orderConfirm', compact(['cart', 'cartSum', 'allSum', 'shippingFee', 'user_info']));
     }
 
 
@@ -183,6 +160,10 @@ class OrderController extends Controller
         $email = $user_info['email'];
         $cart = Session::get('cart');
 
+        $cartSum = Util::calcCartSum($cart);
+        $shippingFee = Util::calcShippingFee($cartSum);
+        $allSum = $cartSum + $shippingFee;
+
         if ($pay == 'cash' || $pay == 'bank') {
             if (!Session::has('cart') || !Session::has('user_info')) {
                 return redirect()->route('order.fail');
@@ -190,17 +171,17 @@ class OrderController extends Controller
         }
 
         if ($pay == 'cash') {
-            createDb('cash', '');
+            createDb('cash', '', $shippingFee, $cartSum, $allSum);
             // メール送信
             Mail::to($email)->send(new OrderReceived($user_info, $cart));
             Mail::to($email)->send(new OrderSuccess($user_info, $cart));
         } elseif ($pay == 'bank') {
-            createDb('bank', '');
+            createDb('bank', '', $shippingFee, $cartSum, $allSum);
             // メール送信
             Mail::to($email)->send(new OrderReceived($user_info, $cart));
             Mail::to($email)->send(new OrderSuccess($user_info, $cart));
         } else {
-            createDb('credit', '');
+            createDb('credit', '', $shippingFee, $cartSum, $allSum);
             // メール送信
             Mail::to($email)->send(new OrderReceived($user_info, $cart));
             Mail::to($email)->send(new OrderSuccess($user_info, $cart));
@@ -247,7 +228,7 @@ class OrderController extends Controller
 }
 
 
-function createDb($pay, $user_id)
+function createDb($pay, $user_id, $shipping_fee, $cartSum, $allSum)
 {
     $cart = Session::get('cart', []);
     $user_info = Session::get('user_info');
@@ -259,7 +240,10 @@ function createDb($pay, $user_id)
     $purchase->email = $user_info['email'];
     $purchase->tel = $user_info['tel'];
     $purchase->pay = $pay;
-    $purchase->payId = $paymentId;
+    $purchase->pay_id = $paymentId;
+    $purchase->items_sum = $cartSum;
+    $purchase->shipping_fee = $shipping_fee;
+    $purchase->purchase_sum = $allSum;
     $purchase->postal_code = $user_info['postal_code'];
     $purchase->prefecture = $user_info['prefecture'];
     $purchase->city = $user_info['city'];
@@ -276,6 +260,7 @@ function createDb($pay, $user_id)
         $purchaseDetail->size_detail_id = $item['size'];
         $purchaseDetail->num = $item['num'];
         $purchaseDetail->price = $item['price'];
+        $purchaseDetail->price_tax = $item['price_tax'];
         $purchaseDetail->name_print1 = $item['name_print1'] ?? null;
         $purchaseDetail->name_print2 = $item['name_print2'] ?? null;
         $purchaseDetail->name_print3 = $item['name_print3'] ?? null;
@@ -283,8 +268,3 @@ function createDb($pay, $user_id)
         $purchaseDetail->save();
     }
 }
-
-function isSelling($item)
-{
-    return Item::where('id', $item['itemId'])->first()->is_selling;
-};

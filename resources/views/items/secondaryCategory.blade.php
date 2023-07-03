@@ -1,16 +1,13 @@
 @extends('layouts.layout-nav')
-
 @section('content')
 
 <h3>{{$category->name}}</h3>
-
 
 <hr>
 {{ $items->links('pagination') }}
 
 <section class="search">
   <form action="{{ route('item.showBySecondaryCategory', ['primarycategoryid' => $category->primary_category_id, 'secondarycategoryid' => $category->id, 'order' => $request->order, 'keyword' => $request->keyword]) }}">
-
 
     @csrf
     検索キーワード：<input id="keyword" style="border:1px solid black;" type="search" name="keyword" value={{Request::get('keyword')}}><br>
@@ -33,9 +30,9 @@
       @if ($item->imageFirst)
       <!-- <p>{{ $item->imageFirst->filename }}</p> -->
       <p>カテゴリー：{{ $item->secondaryCategory->name}}</p>
-      <p>{{ number_format($item->price) }}円</p>
+      <p>{{ number_format($item->price_tax) }}円</p>
       <p>作成日：{{ $item->created_at }}</p>
-      <img style="height:50px;" src="{{ asset('images/'. $item->imageFirst->filename) }}">
+      <img style="height:50px;" src="{{ asset('images/item/'. $item->imageFirst->filename) }}">
       @else
       <p>画像なし</p>
       @endif

@@ -12,7 +12,6 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
-
         $schedule->call(function () {
             // ここに画像削除の処理を記述する
             $expiredImages = ImagePrint::where('expired_date', '<', now())->get();

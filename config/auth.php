@@ -106,6 +106,10 @@ return [
     |
     */
 
-    'password_timeout' => 10800,
+    'password_timeout' => 10800, //パスワード忘れた場合。今は、3時間（60秒 × 60分 × 3時間）
+
+    'remember_me' => [
+        'expiration' => 4320, // 3 days
+    ],
 
 ];

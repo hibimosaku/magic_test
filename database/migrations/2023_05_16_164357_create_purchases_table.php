@@ -21,7 +21,10 @@ return new class extends Migration
             $table->string('email');
             $table->string('tel');
             $table->enum('pay', ['cash', 'credit', 'bank']);
-            $table->string('payId');
+            $table->string('pay_id');
+            $table->integer('items_sum');
+            $table->integer('shipping_fee');
+            $table->integer('purchase_sum');
             $table->string('postal_code', 8);
             $table->string('prefecture');
             $table->string('city');

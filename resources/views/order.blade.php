@@ -10,9 +10,13 @@ if (empty($cart)) {
 
 ?>
 
-<form method="GET" action="{{ route('order.indexConfirm') }}">
+<form method="POST" action="{{ route('order.indexConfirm') }}">
   @csrf
   <button type="submit" class="button">購入確認</button><br>
+  <p>商品合計：{{number_format($cartSum)}}円</p>
+  <p>送料：{{number_format($shippingFee)}}円(3980円以上購入は0円)</p>
+  <p>総合計：{{number_format($allSum)}}円</p>
+  <hr>
 
   <input type="hidden" name="cart" value="{{ json_encode($cart) }}">
   @foreach($cart as $item)
@@ -21,7 +25,7 @@ if (empty($cart)) {
   <p>名前：{{$item['name']}}</p>
   <p>色：{{$item['colorName']}}</p>
   <p>サイズ：{{$item['sizeName']}}</p>
-  <p>価格：{{number_format($item['price'])}}円</p>
+  <p>税込価格：{{number_format($item['price_tax'])}}円</p>
   <p>数：{{$item['num']}}</p>
   @if($item['name_print_num'] > 0)
   <p>名入れ1：{{$item['name_print1']}}</p>
@@ -36,7 +40,7 @@ if (empty($cart)) {
   <img src="{{ asset('storage/' . $item['image_path']) }}" alt="画像">
   @endif
 
-  <p>合計：{{number_format($item['price']*$item['num'])}}円</p>
+  <p>合計：{{number_format($item['price_tax']*$item['num'])}}円</p>
   <hr>
   @endforeach
   支払方法<select name="pay" onChange="showContent(this)">

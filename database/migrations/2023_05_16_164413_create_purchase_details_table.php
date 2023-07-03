@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('size_detail_id')->constrained();
             $table->integer('num');
             $table->integer('price');
+            $table->integer('price_tax');
             $table->string('name_print1')->nullable();
             $table->string('name_print2')->nullable();
             $table->string('name_print3')->nullable();

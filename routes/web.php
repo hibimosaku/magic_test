@@ -53,8 +53,8 @@ Route::prefix('cart')->group(function () {
     Route::post('sessionStripe', [CartController::class, 'sessionStripe'])->name('cart.sessionStripe');
 });
 Route::prefix('order')->group(function () {
-    Route::post('/', [OrderController::class, 'index'])->name('order.index');
-    Route::get('confirm', [OrderController::class, 'indexConfirm'])->name('order.indexConfirm');
+    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+    Route::post('confirm', [OrderController::class, 'indexConfirm'])->name('order.indexConfirm');
     Route::post('checkout', [OrderController::class, 'checkout'])->name('order.checkout');
     Route::get('success', [OrderController::class, 'success'])->name('order.success');
     Route::get('fail', [OrderController::class, 'fail'])->name('order.fail');
@@ -64,7 +64,6 @@ Route::prefix('order')->group(function () {
 
 // authは認証
 Route::middleware('auth')->group(function () {
-    //nameをつけると呼び出し時使える
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -12,6 +12,8 @@ use App\Models\Color;
 use App\Models\Size;
 use App\Models\SizeDetail;
 use Carbon\Carbon;
+use App\Util\Util;
+
 
 define('ITEMNUM', 10);
 
@@ -20,19 +22,16 @@ class CartController extends Controller
     public function index()
     {
         $cart = Session::get('cart', []);
-        $allSum = 0;
-        //合計金額
-        if ($cart) {
-            foreach ($cart as $key => $item) {
-                if (isSelling($item) === 0) {
-                    unset($cart[$key]);
-                } else {
-                    $allSum += $item['price'] * $item['num'];
-                }
-            };
-            Session::put('cart', $cart);
-        }
-        return view('cart', compact('cart', 'allSum'))->with('ITEMNUM', ITEMNUM);
+        // 最新情報に更新
+        $updateCart = Util::updateSessionCart($cart);
+
+        Session::put('cart', $updateCart);
+        $cart = Session::get('cart', []);
+
+        $cartSum = Util::calcCartSum($cart);
+        $shippingFee = Util::calcShippingFee($cartSum);
+        $allSum = $cartSum + $shippingFee;
+        return view('cart', compact('cart', 'allSum', 'cartSum', 'shippingFee'))->with('ITEMNUM', ITEMNUM);
     }
     public function add(Request $request)
     {
@@ -60,7 +59,6 @@ class CartController extends Controller
         $image3 = Image::where('id', $item->image3)->first();
         $image4 = Image::where('id', $item->image4)->first();
 
-
         $image = $request->file('image');
         $imagePath = null;
         if ($image) {
@@ -69,7 +67,7 @@ class CartController extends Controller
             $uniqueFilename = uniqid() . '_' . pathinfo($originalFilename, PATHINFO_FILENAME);
             $imagePath = $image->storeAs('images', $uniqueFilename . '.' . $extension, 'public');
         }
-
+        $item = Item::where('id', $request->input('item_id'))->first();
         $cart_info = [
             'product_id' => Product::where('item_id', $request->input('item_id'))->where('color_id', $request->input('color'))->first()->id,
             'itemId' => $request->input('item_id'),
@@ -83,7 +81,8 @@ class CartController extends Controller
             'size' => $request->input('size'),
             'sizeName' => SizeDetail::where('id', $request->input('size'))->first()->name,
             'num' => $request->input('num'),
-            'price' => Item::where('id', $request->input('item_id'))->first()->price,
+            'price' => $item['price'],
+            'price_tax' => $item['price_tax'],
             'name_print_num' => $item->name_print_num,
             'name_print1' => $request->name_print_num > 0 ? $request->input('name_print1') : null,
             'name_print2' => $request->name_print_num > 1 ? $request->input('name_print2') : null,
@@ -105,6 +104,7 @@ class CartController extends Controller
             $cart[] = $cart_info;
         }
         Session::put('cart', $cart);
+
         if ($imagePath) {
             ImagePrint::create([
                 'filepath' => $imagePath,
@@ -127,7 +127,6 @@ class CartController extends Controller
             }
         }
         Session::put('cart', $cart);
-
         return redirect()->route('cart.index');
     }
 
@@ -137,7 +136,6 @@ class CartController extends Controller
         foreach ($cart as $index => &$item) {
             if ($item['itemId'] === $id && $item['color'] === $color && $item['size'] === $size) {
                 $item['name_print1'] = $request->name_print1;
-
                 break;
             }
         }
@@ -160,7 +158,6 @@ class CartController extends Controller
                         ImagePrint::where('filepath', $imagePathToDelete)->delete();
                     }
                 }
-
                 unset($cart[$index]);
                 break;
             }
@@ -185,7 +182,3 @@ class CartController extends Controller
         }
     }
 }
-function isSelling($item)
-{
-    return Item::where('id', $item['itemId'])->first()->is_selling;
-};

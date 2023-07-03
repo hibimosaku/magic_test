@@ -13,7 +13,7 @@
   <img style="height:50px;" src="{{ asset('images/item/'. $item->imageThird->filename ?? '') }}">
   <img style="height:50px;" src="{{ asset('images/item/'. $item->imageFourth->filename ?? '') }}">
   <p>商品説明：{{ $item->information }}</p>
-  <p id="price">価格：{{ number_format($item->price) }}円</p>
+  <p id="price">税込価格：{{ number_format($item->price_tax) }}円</p>
   色：<select name="color" id="">
     @foreach($products as $product)
     <option value="{{$product->color->id}}">{{$product->color->name}}</option>
@@ -67,12 +67,12 @@
   const select = document.querySelector("select[name='num']");
   let price = document.querySelector("#price").textContent.replace(/[^0-9]/g, '');
   let num = select.value;
-  document.querySelector("#sum").textContent = `合計：${(num * price).toLocaleString()}円`;
+  document.querySelector("#sum").textContent = `合計：${(num * price_tax).toLocaleString()}円`;
 
   // select要素のchangeイベントリスナーの設定
   select.addEventListener('change', function() {
     let num = this.value;
-    document.querySelector("#sum").textContent = `合計：${(num * price).toLocaleString()}円`;
+    document.querySelector("#sum").textContent = `合計：${(num * price_tax).toLocaleString()}円`;
   });
 </script>
 @endsection

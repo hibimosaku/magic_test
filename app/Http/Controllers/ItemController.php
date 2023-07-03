@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\SizeDetail;
 use App\Models\SecondaryCategory;
 use App\Models\PrimaryCategory;
+use App\Providers\AppServiceProvider;
 use Illuminate\Support\Facades\Session;
 
 
@@ -56,6 +57,7 @@ class ItemController extends Controller
         $color = $item->color;
         $size = $item->size;
 
+
         return view('items.item', compact(['products', 'item', 'sizes']));
     }
 
@@ -69,9 +71,9 @@ class ItemController extends Controller
         }
 
         if ($request->order === 'priceHigh') {
-            $query->orderBy('price', 'desc');
+            $query->orderBy('price_tax', 'desc');
         } elseif ($request->order === 'priceLow') {
-            $query->orderBy('price', 'asc');
+            $query->orderBy('price_tax', 'asc');
         } elseif ($request->order === 'latest') {
             $query->orderBy('created_at', 'desc');
         } else {
@@ -83,8 +85,6 @@ class ItemController extends Controller
         $primarycategory = PrimaryCategory::where('id', $primarycategoryid)->first();
         $secondarycategory = SecondaryCategory::where('primary_category_id', $primarycategoryid)->get();
 
-
-
         return view('items.primaryCategory', compact('primarycategory', 'secondarycategory', 'items', 'request'));
     }
 
@@ -93,9 +93,9 @@ class ItemController extends Controller
         $query = Item::where('is_selling', true)->where('secondary_category_id', $secondarycategoryid);
 
         if ($request->order === 'priceHigh') {
-            $query->orderBy('price', 'desc');
+            $query->orderBy('price_tax', 'desc');
         } elseif ($request->order === 'priceLow') {
-            $query->orderBy('price', 'asc');
+            $query->orderBy('price_tax', 'asc');
         } elseif ($request->order === 'latest') {
             $query->orderBy('created_at', 'desc');
         } else {

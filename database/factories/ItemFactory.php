@@ -18,10 +18,13 @@ class ItemFactory extends Factory
     public function definition()
     {
         $faker = Faker::create('ja_JP');
+        $price = $faker->numberBetween(1000, 5000);
+        $price_tax = floor($price * 1.1);
         return [
             'name' => $this->faker->realText(10),
             'information' => $this->faker->realText(50),
-            'price' => $this->faker->numberBetween(1000, 5000),
+            'price' => $price,
+            'price_tax' => $price_tax,
             'size_id' => $this->faker->numberBetween(1, 2),
             'is_selling' => $this->faker->numberBetween(0, 1),
             'sort_order' => $this->faker->randomNumber,

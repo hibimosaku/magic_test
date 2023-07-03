@@ -46,7 +46,8 @@
       画像アップロードなし
       @endif<br>
 
-      <p>{{ number_format($item->price) }}円</p>
+      税込価格<p>{{ number_format($item->price_tax) }}円</p>
+
       <p>作成日：{{ $item->created_at }}</p>
       <img style="height:50px;" src="{{ asset('images/item/'. $item->imageFirst->filename) }}">
       @else

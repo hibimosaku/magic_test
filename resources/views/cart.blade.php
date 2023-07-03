@@ -6,8 +6,11 @@ $url = env('APP_URL');
 @if(!$cart)
 <p>カート空です</p>
 @else
-<p>合計金額:{{number_format($allSum)}}円</p>
-<form method="POST" action="{{route('order.index')}}">
+<p>商品合計：{{number_format($cartSum)}}円</p>
+<p>送料：{{number_format($shippingFee)}}円(3980円以上購入は0円)</p>
+<p>総合計：{{number_format($allSum)}}円</p>
+
+<form method="GET" action="{{route('order.index')}}">
   @csrf
   <input type="hidden" name="cart" value="{{ json_encode($cart) }}">
 
@@ -24,7 +27,7 @@ $url = env('APP_URL');
 <p class="abc">名前：{{$item['name']}}</p>
 <p>色：{{$item['colorName']}}</p>
 <p>サイズ：{{$item['sizeName']}}</p>
-<p>価格：{{number_format($item['price'])}}</p>
+<p>税込価格：{{number_format($item['price_tax'])}}</p>
 @if($item['name_print_num'] > 0)
 <p>名入れ1：{{$item['name_print1']}}</p>
 @endif
@@ -51,7 +54,7 @@ $url = env('APP_URL');
   </select><br>
 </form>
 
-<p>合計{{number_format($item['price'] * $item['num'])}}</p>
+<p>合計{{number_format($item['price_tax'] * $item['num'])}}</p>
 <form method="POST" action="{{ route('cart.delete',['id' =>$item['itemId'],'color' =>$item['color'],'size' =>$item['size']]) }}">
   @csrf
   @method('DELETE')

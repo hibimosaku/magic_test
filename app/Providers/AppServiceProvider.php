@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\SecondaryCategory;
 use App\Models\PrimaryCategory;
 
-
 class AppServiceProvider extends ServiceProvider
 {
     /**

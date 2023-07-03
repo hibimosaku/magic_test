@@ -20,7 +20,7 @@ $url = env('APP_URL');
       <p>名前：{{$item['name']}}</p>
       <p>色：{{$item['colorName']}}</p>
       <p>サイズ：{{$item['sizeName']}}</p>
-      <p>価格：{{number_format($item['price'])}}円</p>
+      <p>税込価格：{{number_format($item['price_tax'])}}円</p>
       <p>数：{{$item['num']}}</p>
       @if($item['name_print_num'] > 0)
       <p>名入れ1：{{$item['name_print1']}}</p>
@@ -35,10 +35,13 @@ $url = env('APP_URL');
       <img src="{{ asset('storage/' . $item['image_path']) }}" alt="画像">
       @endif
 
-      <p>合計：{{number_format($item['price']*$item['num'])}}円</p>
+      <p>合計：{{number_format($item['price_tax']*$item['num'])}}円</p>
       <hr>
       @endforeach
-      <p>総額：{{number_format($allSum)}}円</p>
+      <p>商品合計：{{number_format($cartSum)}}円</p>
+      <p>送料：{{number_format($shippingFee)}}円(3980円以上購入は0円)</p>
+      <p>総合計：{{number_format($allSum)}}円</p>
+
       <p>個人名：{{$user_info['name']}}</p>
       <p>アドレス名：{{$user_info['email']}}</p>
       <p>送り先</p>
